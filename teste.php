@@ -12,7 +12,7 @@
                 echo "A variável 'nome' não foi enviada.";
             }
 
-        ?>
+        ?>d
 
     </body>
 
