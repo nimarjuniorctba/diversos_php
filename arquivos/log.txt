@@ -1,0 +1,5 @@
+Introdução à IA e PHP
+A Inteligência Artificial (IA) é um campo da computação que busca desenvolver sistemas capazes de realizar tarefas que normalmente requerem inteligência humana, como reconhecimento de padrões, tomada de decisões e aprendizado. Embora Python seja frequentemente a linguagem de escolha para projetos de IA, o PHP também pode ser uma opção viável, especialmente para desenvolvedores web.
+
+Bibliotecas e Frameworks
+Existem algumas bibliotecas em PHP que permitem trabalhar com IA. Um exemplo notável é o PHP-ML, uma biblioteca de aprendizado de máquina que fornece algoritmos para classificação, regressão e clustering. Além disso, você pode integrar APIs de IA, como OpenAI, IBM Watson e Google AI, utilizando PHP para construir aplicações mais robustas.
