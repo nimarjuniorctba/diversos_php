@@ -29,8 +29,7 @@ th {
 }
 
 .ocupado {
-    background: linear-gradient(135deg, #f8d7da, #f5c6cb);
-    color: #721c24;
+    color: #fff;
     font-weight: bold;
     font-size: 12px;
     cursor: pointer;
@@ -61,23 +60,77 @@ th {
 
 <h2>Agenda</h2>
 
-<!-- ✅ SELECT ÚNICO -->
+<!-- 📅 DATA -->
 <input type="date" id="dataAgenda" value="{$DATA_ATUAL}">
 
 <br><br>
 
-<!-- ✅ CONTAINER DINÂMICO -->
+<!-- 📊 AGENDA -->
 <div id="agendaContainer">
-    {include file="templates/agenda/agenda_lista.tpl"}
+
+<table>
+<thead>
+<tr>
+    <th>Horário</th>
+
+    {foreach from=$PISTAS item=p}
+        <th>{$p.pis_nome}</th>
+    {/foreach}
+</tr>
+</thead>
+
+<tbody>
+{foreach from=$HORARIOS item=h}
+<tr>
+
+<td>{$h.hor_hora}</td>
+
+{foreach from=$PISTAS item=p}
+
+{assign var=info value=$OCUPADOS[$h.hor_id][$p.pis_id]|default:null}
+{assign var=span value=$ROWSPAN[$h.hor_id][$p.pis_id]|default:0}
+
+{if $info}
+
+    {if $span > 0}
+        <td class="ocupado"
+            rowspan="{$span}"
+            data-id="{$info.id}"
+            style="background: {$info.cor|default:'#dc3545'};">
+
+            <strong>{$info.cliente}</strong><br>
+            <small>{$info.servico}</small>
+
+        </td>
+    {/if}
+
+{else}
+
+    <td class="livre"
+        data-hora="{$h.hor_id}"
+        data-pista="{$p.pis_id}">
+        Livre
+    </td>
+
+{/if}
+
+{/foreach}
+
+</tr>
+{/foreach}
+</tbody>
+</table>
+
 </div>
 
-<!-- MODAL -->
+<!-- 🔳 MODAL -->
 <div id="modalBg" class="modal-bg">
     <div class="modal">
         <div id="modalContent"></div>
     </div>
 </div>
 
+<!-- JQUERY -->
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
 <script>
@@ -96,7 +149,7 @@ function carregarAgenda(){
 }
 
 // =============================
-// 📅 TROCA DATA
+// 📅 TROCAR DATA
 // =============================
 $('#dataAgenda').on('change', function(){
     carregarAgenda();

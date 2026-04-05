@@ -19,14 +19,20 @@ if ($acao == 'lista') {
     $data = $_GET['data'] ?? date('Y-m-d');
 
     // HORÁRIOS
-    $horarios = $pdo->query("SELECT hor_id, hor_hora FROM mod_horarios ORDER BY hor_id")
-                    ->fetchAll(PDO::FETCH_ASSOC);
+    $horarios = $pdo->query("
+        SELECT hor_id, hor_hora 
+        FROM mod_horarios 
+        ORDER BY hor_id
+    ")->fetchAll(PDO::FETCH_ASSOC);
 
     // PISTAS
-    $pistas = $pdo->query("SELECT pis_id, pis_nome FROM mod_pistas WHERE pis_status='A'")
-                  ->fetchAll(PDO::FETCH_ASSOC);
+    $pistas = $pdo->query("
+        SELECT pis_id, pis_nome 
+        FROM mod_pistas 
+        WHERE pis_status='A'
+    ")->fetchAll(PDO::FETCH_ASSOC);
 
-    // AGENDAMENTOS
+    // AGENDAMENTOS (COM COR)
     $stmt = $pdo->prepare("
         SELECT 
             a.age_id,
@@ -34,9 +40,10 @@ if ($acao == 'lista') {
             a.pis_id_fk,
             s.ser_nome,
             s.ser_duracao,
+            s.ser_cor,
             c.cli_nome
         FROM mod_agendamentos a
-        LEFT JOIN servicos s ON s.ser_id = a.ser_id_fk
+        LEFT JOIN mod_servicos s ON s.ser_id = a.ser_id_fk
         LEFT JOIN mod_clientes c ON c.cli_id = a.cli_id_fk
         WHERE a.data = ?
         AND a.age_status = 'a'
@@ -70,9 +77,10 @@ if ($acao == 'lista') {
                 $hid = $horarios[$pos]['hor_id'];
 
                 $ocupados[$hid][$a['pis_id_fk']] = [
-                    'id' => $a['age_id'],
-                    'cliente' => $a['cli_nome'],
-                    'servico' => $a['ser_nome']
+                    'id'       => $a['age_id'],
+                    'cliente'  => $a['cli_nome'],
+                    'servico'  => $a['ser_nome'],
+                    'cor'      => $a['ser_cor'] // 🔥 AQUI
                 ];
 
                 $rowspan[$hid][$a['pis_id_fk']] = ($i == 0) ? $slots : 0;
@@ -95,17 +103,29 @@ if ($acao == 'lista') {
 // =============================
 if ($acao == 'cadastrar') {
 
-    $clientes = $pdo->query("SELECT cli_id, cli_nome FROM mod_clientes ORDER BY cli_nome")
-                    ->fetchAll(PDO::FETCH_ASSOC);
+    $clientes = $pdo->query("
+        SELECT cli_id, cli_nome 
+        FROM mod_clientes 
+        ORDER BY cli_nome
+    ")->fetchAll(PDO::FETCH_ASSOC);
 
-    $servicos = $pdo->query("SELECT ser_id, ser_nome FROM servicos ORDER BY ser_nome")
-                    ->fetchAll(PDO::FETCH_ASSOC);
+    $servicos = $pdo->query("
+        SELECT ser_id, ser_nome, ser_cor 
+        FROM mod_servicos 
+        ORDER BY ser_nome
+    ")->fetchAll(PDO::FETCH_ASSOC);
 
-    $pistas = $pdo->query("SELECT pis_id, pis_nome FROM mod_pistas WHERE pis_status='A'")
-                  ->fetchAll(PDO::FETCH_ASSOC);
+    $pistas = $pdo->query("
+        SELECT pis_id, pis_nome 
+        FROM mod_pistas 
+        WHERE pis_status='A'
+    ")->fetchAll(PDO::FETCH_ASSOC);
 
-    $horarios = $pdo->query("SELECT hor_id, hor_hora FROM mod_horarios ORDER BY hor_hora")
-                    ->fetchAll(PDO::FETCH_ASSOC);
+    $horarios = $pdo->query("
+        SELECT hor_id, hor_hora 
+        FROM mod_horarios 
+        ORDER BY hor_hora
+    ")->fetchAll(PDO::FETCH_ASSOC);
 
     $smarty->assign('CLIENTES', $clientes);
     $smarty->assign('SERVICOS', $servicos);
@@ -136,19 +156,24 @@ if ($acao == 'descricao') {
             s.ser_nome,
             s.ser_valor,
             s.ser_duracao,
+            s.ser_cor,
             h.hor_hora
         FROM mod_agendamentos a
         LEFT JOIN mod_clientes c ON c.cli_id = a.cli_id_fk
-        LEFT JOIN servicos s ON s.ser_id = a.ser_id_fk
+        LEFT JOIN mod_servicos s ON s.ser_id = a.ser_id_fk
         LEFT JOIN mod_horarios h ON h.hor_id = a.hora_id_fk
         WHERE a.age_id = ?
     ");
 
     $stmt->execute([$id]);
     $dados = $stmt->fetch(PDO::FETCH_ASSOC);
+    
+    
 
+    // horário final
     $inicio = strtotime($dados['hor_hora']);
     $dados['hora_fim'] = date('H:i', $inicio + ($dados['ser_duracao'] * 60));
+    
 
     $smarty->assign('AG', $dados);
     $smarty->display('templates/agenda/descricao.tpl');

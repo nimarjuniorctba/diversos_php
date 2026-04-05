@@ -32,10 +32,11 @@ SELECT
     a.hora_id_fk,
     a.pis_id_fk,
     s.ser_nome,
+    s.ser_cor,
     s.ser_duracao,
     c.cli_nome
 FROM mod_agendamentos a
-LEFT JOIN servicos s ON s.ser_id = a.ser_id_fk
+LEFT JOIN mod_servicos s ON s.ser_id = a.ser_id_fk
 LEFT JOIN mod_clientes c ON c.cli_id = a.cli_id_fk
 WHERE a.data = ?
 AND a.age_status = 'a'
@@ -73,7 +74,8 @@ foreach ($agendamentos as $a) {
             $ocupados[$hid][$a['pis_id_fk']] = [
                 'id' => $a['age_id'],
                 'cliente' => $a['cli_nome'],
-                'servico' => $a['ser_nome']
+                'servico' => $a['ser_nome'],
+                'cor' => $a['ser_cor']        
             ];
 
             $rowspan[$hid][$a['pis_id_fk']] = ($i == 0) ? $slots : 0;
