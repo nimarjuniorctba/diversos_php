@@ -1,0 +1,66 @@
+# Classe Agenda Documentation
+
+## Overview 
+The `Agenda` class provides functionality for managing a collection of contacts and their associated information. It allows users to add, remove, and search for contacts efficiently.
+
+## Structure 
+The `Agenda` class contains the following properties and methods:
+
+### Properties:  
+- `contacts`: An array that holds all contact information.
+
+### Methods:
+1. **addContact(name: string, phone: string, email: string)**:
+   - **Description**: Adds a new contact to the agenda.  
+   - **Parameters**: 
+     - `name`: The name of the contact.  
+     - `phone`: The phone number of the contact.  
+     - `email`: The email address of the contact.  
+   - **Returns**: `void`
+
+2. **removeContact(name: string)**:
+   - **Description**: Removes a contact from the agenda by name.  
+   - **Parameters**: 
+     - `name`: The name of the contact to remove.  
+   - **Returns**: `void`
+
+3. **searchContact(name: string): Contact | null**:
+   - **Description**: Searches for a contact by name.  
+   - **Parameters**: 
+     - `name`: The name of the contact to search for.  
+   - **Returns**: The contact object or `null` if not found.
+
+4. **listContacts(): Contact[]**:
+   - **Description**: Returns a list of all contacts in the agenda.  
+   - **Returns**: An array of contact objects.
+
+## Advantages
+- **Efficiency**: The agenda allows for quick additions and removals of contacts.
+- **Easy to Use**: The interface is straightforward, making it accessible for all users.
+- **Search Functionality**: Users can quickly find contacts by name.
+
+## Usage Example
+```php
+$agenda = new Agenda();
+
+// Adding contacts
+$agenda->addContact('John Doe', '123-456-7890', 'john@example.com');
+$agenda->addContact('Jane Smith', '098-765-4321', 'jane@example.com');
+
+// Searching for a contact
+$contact = $agenda->searchContact('John Doe');
+if ($contact) {
+    echo "Found: " . $contact->name;
+} else {
+    echo "Contact not found.";
+}
+
+// Listing all contacts
+$contacts = $agenda->listContacts();
+foreach ($contacts as $contact) {
+    echo "Name: " . $contact->name . " - Phone: " . $contact->phone . " - Email: " . $contact->email . "\n";
+}
+
+// Removing a contact
+$agenda->removeContact('John Doe');
+```
