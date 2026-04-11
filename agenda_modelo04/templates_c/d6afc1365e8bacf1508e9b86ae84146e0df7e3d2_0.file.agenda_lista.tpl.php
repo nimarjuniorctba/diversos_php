@@ -1,18 +1,18 @@
 <?php
-/* Smarty version 4.1.0, created on 2026-04-08 10:17:44
+/* Smarty version 4.1.0, created on 2026-04-09 17:11:02
   from 'C:\xampp\htdocs\diversos_php\agenda_modelo04\templates\agenda\agenda_lista.tpl' */
 
 /* @var Smarty_Internal_Template $_smarty_tpl */
 if ($_smarty_tpl->_decodeProperties($_smarty_tpl, array (
   'version' => '4.1.0',
-  'unifunc' => 'content_69d65578e0cb78_26516055',
+  'unifunc' => 'content_69d807d6d74415_86906477',
   'has_nocache_code' => false,
   'file_dependency' => 
   array (
     'd6afc1365e8bacf1508e9b86ae84146e0df7e3d2' => 
     array (
       0 => 'C:\\xampp\\htdocs\\diversos_php\\agenda_modelo04\\templates\\agenda\\agenda_lista.tpl',
-      1 => 1775653955,
+      1 => 1775765460,
       2 => 'file',
     ),
   ),
@@ -20,7 +20,7 @@ if ($_smarty_tpl->_decodeProperties($_smarty_tpl, array (
   array (
   ),
 ),false)) {
-function content_69d65578e0cb78_26516055 (Smarty_Internal_Template $_smarty_tpl) {
+function content_69d807d6d74415_86906477 (Smarty_Internal_Template $_smarty_tpl) {
 ?><style>
 table {
     border-collapse: collapse;
@@ -117,10 +117,10 @@ $_smarty_tpl->_assignInScope('span', (($tmp = $_smarty_tpl->tpl_vars['ROWSPAN']-
             <small><?php echo $_smarty_tpl->tpl_vars['info']->value['servico'];?>
 </small>
 
-            <?php if ($_smarty_tpl->tpl_vars['info']->value['placa']) {?>
-                <small>🚗 <?php echo $_smarty_tpl->tpl_vars['info']->value['placa'];?>
-</small>
-            <?php }?>
+            <small>
+                🚗 <?php echo (($tmp = $_smarty_tpl->tpl_vars['info']->value['placa'] ?? null)===null||$tmp==='' ? "---" ?? null : $tmp);?>
+
+            </small>
 
         </td>
     <?php }?>

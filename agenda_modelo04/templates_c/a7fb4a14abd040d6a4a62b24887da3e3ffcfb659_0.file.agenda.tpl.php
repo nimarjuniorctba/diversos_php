@@ -1,18 +1,18 @@
 <?php
-/* Smarty version 4.1.0, created on 2026-04-08 10:17:44
+/* Smarty version 4.1.0, created on 2026-04-09 17:11:02
   from 'C:\xampp\htdocs\diversos_php\agenda_modelo04\templates\agenda.tpl' */
 
 /* @var Smarty_Internal_Template $_smarty_tpl */
 if ($_smarty_tpl->_decodeProperties($_smarty_tpl, array (
   'version' => '4.1.0',
-  'unifunc' => 'content_69d655789ee0f4_17824114',
+  'unifunc' => 'content_69d807d6a38916_57887561',
   'has_nocache_code' => false,
   'file_dependency' => 
   array (
     'a7fb4a14abd040d6a4a62b24887da3e3ffcfb659' => 
     array (
       0 => 'C:\\xampp\\htdocs\\diversos_php\\agenda_modelo04\\templates\\agenda.tpl',
-      1 => 1775654261,
+      1 => 1775765457,
       2 => 'file',
     ),
   ),
@@ -20,7 +20,7 @@ if ($_smarty_tpl->_decodeProperties($_smarty_tpl, array (
   array (
   ),
 ),false)) {
-function content_69d655789ee0f4_17824114 (Smarty_Internal_Template $_smarty_tpl) {
+function content_69d807d6a38916_57887561 (Smarty_Internal_Template $_smarty_tpl) {
 ?><style>
 body {
     font-family: Arial;

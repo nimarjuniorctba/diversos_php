@@ -70,9 +70,9 @@ th {
 
             <small>{$info.servico}</small>
 
-            {if $info.placa}
-                <small>🚗 {$info.placa}</small>
-            {/if}
+            <small>
+                🚗 {$info.placa|default:"---"}
+            </small>
 
         </td>
     {/if}
