@@ -1,4 +1,2 @@
 
--tabela veiculo
--data de cadastro
 -tabela financeiro ?

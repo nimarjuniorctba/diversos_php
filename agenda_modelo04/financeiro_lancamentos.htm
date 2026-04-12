@@ -1,0 +1,327 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+<meta charset="UTF-8">
+<title>Lançamentos Financeiros</title>
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+<style>
+body {
+    font-family: Arial;
+    margin: 0;
+}
+
+/* MENU */
+.menu {
+    background: #333;
+    padding: 15px;
+}
+.menu a {
+    color: #fff;
+    margin-right: 15px;
+    text-decoration: none;
+    font-weight: bold;
+}
+
+.container {
+    padding: 20px;
+    max-width: 800px;
+    margin: auto;
+}
+
+/* PADRÃO CAMPOS */
+input, select, button {
+    padding: 10px;
+    margin: 5px 0;
+    width: 100%;
+    box-sizing: border-box; /* 🔥 resolve diferença de tamanho */
+}
+
+/* BOTÃO */
+button {
+    background: #28a745;
+    color: #fff;
+    border: none;
+    cursor: pointer;
+}
+button:hover {
+    background: #218838;
+}
+
+.hidden {
+    display: none;
+}
+
+/* ESPAÇAMENTO ENTRE BLOCOS */
+.bloco-tabela {
+    margin-top: 30px;
+}
+
+/* TOPO TABELA */
+.topo-tabela {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 10px;
+}
+
+.resumo {
+    font-weight: bold;
+}
+
+.entrada-total { color: green; }
+.saida-total { color: red; }
+
+/* TABELA */
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 10px;
+}
+
+th, td {
+    padding: 10px;
+    border: 1px solid #ccc;
+    text-align: center;
+}
+
+th {
+    background: #333;
+    color: #fff;
+}
+
+.entrada { color: green; }
+.saida { color: red; }
+
+.acoes button {
+    width: auto;
+    padding: 5px 8px;
+    font-size: 12px;
+    margin: 2px;
+}
+</style>
+
+</head>
+<body>
+
+<div class="menu">
+    <a href="#">🏠 Home</a>
+    <a href="#">💰 Lançamentos</a>
+</div>
+
+<div class="container">
+
+    <h2>Novo Lançamento</h2>
+
+    <input type="hidden" id="editIndex">
+
+    <label>Tipo:</label>
+    <select id="tipo">
+        <option value="entrada">Entrada</option>
+        <option value="saida">Saída</option>
+    </select>
+
+    <!-- ENTRADA -->
+    <div id="boxEntrada">
+        <label>Tipo da Entrada:</label>
+        <select id="tipoEntrada">
+            <option value="servico">Serviço</option>
+            <option value="manual">Manual</option>
+        </select>
+
+        <div id="selectServico">
+            <label>Serviço:</label>
+            <select id="servico"></select>
+        </div>
+    </div>
+
+    <!-- SAÍDA -->
+    <div id="boxSaida" class="hidden">
+        <label>Categoria:</label>
+        <select id="categoriaSaida">
+            <option>Produtos</option>
+            <option>Funcionário</option>
+            <option>Manutenção</option>
+            <option>Outros</option>
+        </select>
+    </div>
+
+    <label>Valor:</label>
+    <input type="number" id="valor">
+
+    <label>Descrição:</label>
+    <input type="text" id="descricao">
+
+    <button id="btnSalvar">Salvar</button>
+
+    <!-- BLOCO TABELA -->
+    <div class="bloco-tabela">
+
+        <h3>📅 Lançamentos do Dia</h3>
+
+        <div class="topo-tabela">
+
+            <div class="resumo">
+                <span class="entrada-total">Entradas: R$ <span id="totalEntrada">0</span></span> |
+                <span class="saida-total">Saídas: R$ <span id="totalSaida">0</span></span>
+            </div>
+
+            <div style="width:150px;">
+                <select id="filtro">
+                    <option value="todos">Todos</option>
+                    <option value="entrada">Entradas</option>
+                    <option value="saida">Saídas</option>
+                </select>
+            </div>
+
+        </div>
+
+        <table>
+            <thead>
+                <tr>
+                    <th>Tipo</th>
+                    <th>Descrição</th>
+                    <th>Valor</th>
+                    <th>Ações</th>
+                </tr>
+            </thead>
+            <tbody id="tabelaDia"></tbody>
+        </table>
+
+    </div>
+
+</div>
+
+<script>
+
+// SERVIÇOS (simulado)
+function carregarServicos() {
+    let servicos = [
+        {id:1, nome:"Lavagem Simples"},
+        {id:2, nome:"Lavagem + Cera"},
+        {id:3, nome:"Higienização"}
+    ];
+
+    let html = "";
+    servicos.forEach(s => {
+        html += `<option value="${s.id}">${s.nome}</option>`;
+    });
+
+    $('#servico').html(html);
+}
+
+// DADOS
+let lancamentos = [
+    {tipo:"entrada", desc:"Lavagem Simples", valor:50},
+    {tipo:"saida", desc:"Produto", valor:20}
+];
+
+// RENDER
+function renderTabela() {
+
+    let filtro = $('#filtro').val();
+
+    let html = "";
+    let totalEntrada = 0;
+    let totalSaida = 0;
+
+    lancamentos.forEach((l, index) => {
+
+        if(l.tipo === 'entrada') totalEntrada += parseFloat(l.valor);
+        else totalSaida += parseFloat(l.valor);
+
+        if(filtro !== 'todos' && l.tipo !== filtro) return;
+
+        html += `
+        <tr>
+            <td class="${l.tipo}">${l.tipo}</td>
+            <td>${l.desc}</td>
+            <td>R$ ${l.valor}</td>
+            <td class="acoes">
+                <button onclick="editar(${index})">✏️</button>
+                <button onclick="excluir(${index})">❌</button>
+            </td>
+        </tr>
+        `;
+    });
+
+    $('#tabelaDia').html(html);
+    $('#totalEntrada').text(totalEntrada.toFixed(2));
+    $('#totalSaida').text(totalSaida.toFixed(2));
+}
+
+// EDITAR
+function editar(index){
+    let l = lancamentos[index];
+
+    $('#tipo').val(l.tipo).trigger('change');
+    $('#valor').val(l.valor);
+    $('#descricao').val(l.desc);
+    $('#editIndex').val(index);
+}
+
+// EXCLUIR
+function excluir(index){
+    if(confirm('Excluir lançamento?')){
+        lancamentos.splice(index,1);
+        renderTabela();
+    }
+}
+
+// EVENTOS
+$('#tipo').change(function(){
+    if($(this).val() === 'entrada'){
+        $('#boxEntrada').show();
+        $('#boxSaida').hide();
+    } else {
+        $('#boxEntrada').hide();
+        $('#boxSaida').show();
+    }
+});
+
+$('#tipoEntrada').change(function(){
+    if($(this).val() === 'manual'){
+        $('#selectServico').hide();
+    } else {
+        $('#selectServico').show();
+    }
+});
+
+$('#filtro').change(function(){
+    renderTabela();
+});
+
+$('#btnSalvar').click(function(){
+
+    let tipo = $('#tipo').val();
+    let valor = $('#valor').val();
+    let desc = $('#descricao').val();
+    let editIndex = $('#editIndex').val();
+
+    if(!valor || !desc){
+        alert('Preencha os campos');
+        return;
+    }
+
+    if(editIndex !== ""){
+        lancamentos[editIndex] = {tipo, desc, valor};
+        $('#editIndex').val('');
+    } else {
+        lancamentos.push({tipo, desc, valor});
+    }
+
+    renderTabela();
+
+    $('#valor').val('');
+    $('#descricao').val('');
+});
+
+// INIT
+carregarServicos();
+renderTabela();
+
+</script>
+
+</body>
+</html>
