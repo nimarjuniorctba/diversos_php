@@ -106,3 +106,23 @@ CREATE TABLE IF NOT EXISTS agenda.mod_agendamentos (
     age_dt_cadastro DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP	
 
 );
+
+-- ============================
+-- FORMA DE PAGAMENTO
+-- ============================
+
+CREATE TABLE IF NOT EXISTS agenda.mod_forma_pagamento (
+    for_id INT AUTO_INCREMENT PRIMARY KEY,
+    for_nome VARCHAR(100) NOT NULL,
+    for_status VARCHAR(1) NOT NULL COMMENT 'a=ativo;i=inativo;e=excluido'
+);
+
+
+INSERT INTO agenda.mod_forma_pagamento (for_nome, for_status) VALUES
+
+('Dinheiro', 'a'),
+('Pix', 'a'),
+('Cartão Débito', 'a'),
+('Cartão Crédito', 'a'),
+('Transferência Bancária', 'a'),
+('Boleto', 'a')
