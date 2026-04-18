@@ -67,6 +67,12 @@ button {
             <option value="{$p.pis_id}">{$p.pis_nome}</option>
         {/foreach}
     </select>
+	
+	<select name="forma_pagamento">
+    <option value="">Selecione</option>
+    <option value="1">Dinheiro</option>
+    <option value="2">Pix</option>
+	</select>
 
     <label>Horário Inicial</label>
     <select name="hora_inicio" required>

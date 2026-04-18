@@ -1,18 +1,18 @@
 <?php
-/* Smarty version 4.1.0, created on 2026-04-08 09:59:47
+/* Smarty version 4.1.0, created on 2026-04-18 16:57:24
   from 'C:\xampp\htdocs\diversos_php\agenda_modelo04\templates\agenda\cadastrar_agendamento.tpl' */
 
 /* @var Smarty_Internal_Template $_smarty_tpl */
 if ($_smarty_tpl->_decodeProperties($_smarty_tpl, array (
   'version' => '4.1.0',
-  'unifunc' => 'content_69d65143252951_01609763',
+  'unifunc' => 'content_69e3e224bec0f8_87489910',
   'has_nocache_code' => false,
   'file_dependency' => 
   array (
     'dabe42b2826d51da26a0da2670c0565f13cf4961' => 
     array (
       0 => 'C:\\xampp\\htdocs\\diversos_php\\agenda_modelo04\\templates\\agenda\\cadastrar_agendamento.tpl',
-      1 => 1775653105,
+      1 => 1776542240,
       2 => 'file',
     ),
   ),
@@ -20,7 +20,7 @@ if ($_smarty_tpl->_decodeProperties($_smarty_tpl, array (
   array (
   ),
 ),false)) {
-function content_69d65143252951_01609763 (Smarty_Internal_Template $_smarty_tpl) {
+function content_69e3e224bec0f8_87489910 (Smarty_Internal_Template $_smarty_tpl) {
 ?><style>
 body {
     font-family: Arial;
@@ -118,6 +118,12 @@ $_smarty_tpl->tpl_vars['p']->do_else = false;
 }
 $_smarty_tpl->smarty->ext->_foreach->restore($_smarty_tpl, 1);?>
     </select>
+	
+	<select name="forma_pagamento">
+    <option value="">Selecione</option>
+    <option value="1">Dinheiro</option>
+    <option value="2">Pix</option>
+	</select>
 
     <label>Horário Inicial</label>
     <select name="hora_inicio" required>

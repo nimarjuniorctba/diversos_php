@@ -50,56 +50,122 @@ $horarios = $pdo->query("
 // =============================
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
-    $data     = $_POST['data'];
-    $hora_ini = $_POST['hora_inicio'];
-    $pista    = $_POST['pista'];
-    $servico  = $_POST['servico'];
-    $cliente  = $_POST['cliente'];
-    $veiculo  = $_POST['veiculo'];
-    $desconto = $_POST['desconto'] ?? 0;
+    try {
 
-    // 🔹 pega dados do serviço
-    $stmt = $pdo->prepare("
-        SELECT ser_valor, ser_duracao 
-        FROM mod_servicos 
-        WHERE ser_id=?
-    ");
-    $stmt->execute([$servico]);
-    $ser = $stmt->fetch(PDO::FETCH_ASSOC);
+        $pdo->beginTransaction(); // 🔥 segurança total
 
-    $valor = (float)$ser['ser_valor'];
-    $duracao = (int)$ser['ser_duracao'];
+        $data     = $_POST['data'];
+        $hora_ini = $_POST['hora_inicio'];
+        $pista    = $_POST['pista'];
+        $servico  = $_POST['servico'];
+        $cliente  = $_POST['cliente'];
+        $veiculo  = $_POST['veiculo'];
+        $desconto = $_POST['desconto'] ?? 0;
+        $forma    = $_POST['forma_pagamento'] ?? null;
 
-    // 🔹 calcula slots
-    $slots = max(1, intval($duracao / 5));
-    $hora_fim = $hora_ini + $slots;
+        // =============================
+        // 🔹 DADOS DO SERVIÇO
+        // =============================
+        $stmt = $pdo->prepare("
+            SELECT ser_valor, ser_duracao, ser_nome
+            FROM mod_servicos 
+            WHERE ser_id=?
+        ");
+        $stmt->execute([$servico]);
+        $ser = $stmt->fetch(PDO::FETCH_ASSOC);
 
-    $valor_final = $valor - (float)$desconto;
+        $valor = (float)$ser['ser_valor'];
+        $duracao = (int)$ser['ser_duracao'];
+        $descricao = $ser['ser_nome'];
 
-    // 🔹 salva
-    $stmt = $pdo->prepare("
-        INSERT INTO mod_agendamentos
-        (age_data, age_hora_inicio_fk, age_hora_fim_fk, pis_id_fk, ser_id_fk, cli_id_fk, vei_id_fk, age_desconto, age_valor_final)
-        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
-    ");
+        // =============================
+        // 🔹 CALCULAR HORÁRIO FINAL
+        // =============================
+        $slots = max(1, intval($duracao / 5));
+        $hora_fim = $hora_ini + $slots;
 
-    $ok = $stmt->execute([
-        $data,
-        $hora_ini,
-        $hora_fim,
-        $pista,
-        $servico,
-        $cliente,
-        $veiculo,
-        $desconto,
-        $valor_final
-    ]);
+        // =============================
+        // 🔹 VALOR FINAL
+        // =============================
+        $valor_final = $valor - (float)$desconto;
 
-    echo "<script>alert('Agendamento realizado!');</script>";
+        // =============================
+        // 🔹 SALVAR AGENDAMENTO
+        // =============================
+        $stmt = $pdo->prepare("
+            INSERT INTO mod_agendamentos
+            (age_data, age_hora_inicio_fk, age_hora_fim_fk, pis_id_fk, ser_id_fk, cli_id_fk, vei_id_fk, age_desconto, age_valor_final)
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
+        ");
+
+        $stmt->execute([
+            $data,
+            $hora_ini,
+            $hora_fim,
+            $pista,
+            $servico,
+            $cliente,
+            $veiculo,
+            $desconto,
+            $valor_final
+        ]);
+
+        $age_id = $pdo->lastInsertId();
+
+        // =============================
+        // 🔹 SALVAR FINANCEIRO
+        // =============================
+        $stmt = $pdo->prepare("
+            INSERT INTO mod_financeiro
+            (
+                fin_data,
+                fin_hora_fk,
+                fin_tipo,
+                fin_origem,
+                fin_valor,
+                fin_desconto,
+                fin_valor_final,
+                fin_descricao,
+                age_id_fk,
+                ser_id_fk,
+                for_id_fk,
+                cli_id_fk,
+                vei_id_fk,
+                pis_id_fk
+            )
+            VALUES (?, ?, 'entrada', 'agenda', ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+        ");
+
+        $stmt->execute([
+            $data,
+            $hora_ini,
+            $valor,
+            $desconto,
+            $valor_final,
+            $descricao,
+            $age_id,
+            $servico,
+            $forma,
+            $cliente,
+            $veiculo,
+            $pista
+        ]);
+
+        $pdo->commit();
+
+        echo "<script>alert('Agendamento e financeiro salvos com sucesso!');</script>";
+
+    } catch (Exception $e) {
+
+        $pdo->rollBack();
+        echo "<script>alert('Erro: ".$e->getMessage()."');</script>";
+    }
 }
 
 
-// envia pro template
+// =============================
+// TEMPLATE
+// =============================
 $smarty->assign('CLIENTES', $clientes);
 $smarty->assign('SERVICOS', $servicos);
 $smarty->assign('PISTAS', $pistas);
