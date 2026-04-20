@@ -29,6 +29,7 @@
 Cancelar Agendamento
 </button>
 
+{literal}
 <script>
 $('#btnCancelar').click(function(){
 
@@ -47,3 +48,5 @@ $('#btnCancelar').click(function(){
 
 });
 </script>
+
+{/literal}
