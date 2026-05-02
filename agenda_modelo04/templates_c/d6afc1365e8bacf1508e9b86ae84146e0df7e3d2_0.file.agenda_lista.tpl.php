@@ -1,18 +1,18 @@
 <?php
-/* Smarty version 4.1.0, created on 2026-05-02 09:55:39
+/* Smarty version 4.1.0, created on 2026-05-02 17:04:06
   from 'C:\xampp\htdocs\diversos_php\agenda_modelo04\templates\agenda\agenda_lista.tpl' */
 
 /* @var Smarty_Internal_Template $_smarty_tpl */
 if ($_smarty_tpl->_decodeProperties($_smarty_tpl, array (
   'version' => '4.1.0',
-  'unifunc' => 'content_69f5f44b018e88_95980103',
+  'unifunc' => 'content_69f658b69064b1_86547442',
   'has_nocache_code' => false,
   'file_dependency' => 
   array (
     'd6afc1365e8bacf1508e9b86ae84146e0df7e3d2' => 
     array (
       0 => 'C:\\xampp\\htdocs\\diversos_php\\agenda_modelo04\\templates\\agenda\\agenda_lista.tpl',
-      1 => 1775765460,
+      1 => 1777752242,
       2 => 'file',
     ),
   ),
@@ -20,7 +20,7 @@ if ($_smarty_tpl->_decodeProperties($_smarty_tpl, array (
   array (
   ),
 ),false)) {
-function content_69f5f44b018e88_95980103 (Smarty_Internal_Template $_smarty_tpl) {
+function content_69f658b69064b1_86547442 (Smarty_Internal_Template $_smarty_tpl) {
 ?><style>
 table {
     border-collapse: collapse;
@@ -42,6 +42,11 @@ th {
 .livre {
     background: #d4edda;
     cursor: pointer;
+    font-weight: bold;
+}
+
+.livre:hover {
+    background: #bfe5c6;
 }
 
 .ocupado {
@@ -50,11 +55,23 @@ th {
     font-size: 12px;
     cursor: pointer;
     border-radius: 4px;
+    padding: 6px;
 }
 
 .ocupado small {
     display:block;
     font-size:10px;
+}
+
+/* STATUS */
+.status-pago {
+    color: #00ff9c;
+    font-size: 11px;
+}
+
+.status-pendente {
+    color: #ffd166;
+    font-size: 11px;
 }
 </style>
 
@@ -103,12 +120,17 @@ $_smarty_tpl->_assignInScope('span', (($tmp = $_smarty_tpl->tpl_vars['ROWSPAN']-
 <?php if ($_smarty_tpl->tpl_vars['info']->value) {?>
 
     <?php if ($_smarty_tpl->tpl_vars['span']->value > 0) {?>
+
+                <?php if ($_smarty_tpl->tpl_vars['info']->value['pago']) {?>
+            <?php $_smarty_tpl->_assignInScope('bg', '#28a745');?>         <?php } else { ?>
+            <?php $_smarty_tpl->_assignInScope('bg', (($tmp = $_smarty_tpl->tpl_vars['info']->value['cor'] ?? null)===null||$tmp==='' ? '#dc3545' ?? null : $tmp));?>         <?php }?>
+
         <td class="ocupado"
             rowspan="<?php echo $_smarty_tpl->tpl_vars['span']->value;?>
 "
             data-id="<?php echo $_smarty_tpl->tpl_vars['info']->value['id'];?>
 "
-            style="background: <?php echo (($tmp = $_smarty_tpl->tpl_vars['info']->value['cor'] ?? null)===null||$tmp==='' ? '#dc3545' ?? null : $tmp);?>
+            style="background: <?php echo $_smarty_tpl->tpl_vars['bg']->value;?>
 ;">
 
             <strong><?php echo $_smarty_tpl->tpl_vars['info']->value['cliente'];?>
@@ -122,7 +144,14 @@ $_smarty_tpl->_assignInScope('span', (($tmp = $_smarty_tpl->tpl_vars['ROWSPAN']-
 
             </small>
 
+                        <?php if ($_smarty_tpl->tpl_vars['info']->value['pago']) {?>
+                <small class="status-pago">✔ Pago</small>
+            <?php } else { ?>
+                <small class="status-pendente">💰 Pendente</small>
+            <?php }?>
+
         </td>
+
     <?php }?>
 
 <?php } else { ?>

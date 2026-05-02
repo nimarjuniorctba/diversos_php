@@ -80,10 +80,9 @@ th {
     </div>
 </div>
 
-<!-- AGENDA CARREGA VIA AJAX -->
+<!-- AGENDA -->
 <div id="agendaContainer"></div>
 
-<!-- JQUERY -->
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
 <script>
@@ -101,21 +100,11 @@ function carregarAgenda(){
 }
 
 // =============================
-// 📅 TROCA DE DATA
-// =============================
-$('#dataAgenda').on('change', function(){
-    carregarAgenda();
-});
+$('#dataAgenda').on('change', carregarAgenda);
 
 // =============================
-// ⏱ AUTO REFRESH (30s)
-// =============================
-setInterval(function(){
-    carregarAgenda();
-}, 30000);
+setInterval(carregarAgenda, 30000);
 
-// =============================
-// 🟢 NOVO AGENDAMENTO
 // =============================
 $(document).on('click', '.livre', function(){
 
@@ -131,8 +120,6 @@ $(document).on('click', '.livre', function(){
 });
 
 // =============================
-// 🔴 DETALHES
-// =============================
 $(document).on('click', '.ocupado', function(){
 
     let id = $(this).data('id');
@@ -145,16 +132,12 @@ $(document).on('click', '.ocupado', function(){
 });
 
 // =============================
-// ❌ FECHAR MODAL
-// =============================
 $('#modalBg').click(function(e){
     if(e.target.id === 'modalBg'){
         $(this).hide();
     }
 });
 
-// =============================
-// 🚀 INICIALIZA
 // =============================
 carregarAgenda();
 

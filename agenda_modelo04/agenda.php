@@ -30,7 +30,7 @@ $pistas = $pdo->query("
 ")->fetchAll(PDO::FETCH_ASSOC);
 
 // =============================
-// 🔹 AGENDAMENTOS (NOVO PADRÃO)
+// 🔹 AGENDAMENTOS (COM STATUS PAGO)
 // =============================
 $stmt = $pdo->prepare("
 SELECT 
@@ -41,7 +41,15 @@ SELECT
     s.ser_cor,
     s.ser_duracao,
     c.cli_nome,
-    v.vei_placa
+    v.vei_placa,
+
+    (
+        SELECT COUNT(*) 
+        FROM mod_financeiro f
+        WHERE f.age_id_fk = a.age_id
+        AND f.fin_status = 'a'
+    ) AS ja_pago
+
 FROM mod_agendamentos a
 LEFT JOIN mod_servicos s ON s.ser_id = a.ser_id_fk
 LEFT JOIN mod_clientes c ON c.cli_id = a.cli_id_fk
@@ -49,6 +57,7 @@ LEFT JOIN mod_veiculos v ON v.vei_id = a.vei_id_fk
 WHERE a.age_data = ?
 AND a.age_status = 'a'
 ");
+
 $stmt->execute([$data]);
 $agendamentos = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
@@ -86,7 +95,8 @@ foreach ($agendamentos as $a) {
                 'cliente'  => $a['cli_nome'],
                 'servico'  => $a['ser_nome'],
                 'placa'    => $a['vei_placa'],
-                'cor'      => $a['ser_cor']
+                'cor'      => $a['ser_cor'],
+                'pago'     => $a['ja_pago'] > 0
             ];
 
             $rowspan[$hid][$a['pis_id_fk']] = ($i == 0) ? $slots : 0;

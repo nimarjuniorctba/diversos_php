@@ -19,6 +19,11 @@ th {
 .livre {
     background: #d4edda;
     cursor: pointer;
+    font-weight: bold;
+}
+
+.livre:hover {
+    background: #bfe5c6;
 }
 
 .ocupado {
@@ -27,11 +32,23 @@ th {
     font-size: 12px;
     cursor: pointer;
     border-radius: 4px;
+    padding: 6px;
 }
 
 .ocupado small {
     display:block;
     font-size:10px;
+}
+
+/* STATUS */
+.status-pago {
+    color: #00ff9c;
+    font-size: 11px;
+}
+
+.status-pendente {
+    color: #ffd166;
+    font-size: 11px;
 }
 </style>
 
@@ -61,10 +78,18 @@ th {
 {if $info}
 
     {if $span > 0}
+
+        {* 🔥 DEFINE COR BASEADA NO PAGAMENTO *}
+        {if $info.pago}
+            {assign var=bg value='#28a745'} {* verde pago *}
+        {else}
+            {assign var=bg value=$info.cor|default:'#dc3545'} {* cor do serviço *}
+        {/if}
+
         <td class="ocupado"
             rowspan="{$span}"
             data-id="{$info.id}"
-            style="background: {$info.cor|default:'#dc3545'};">
+            style="background: {$bg};">
 
             <strong>{$info.cliente}</strong>
 
@@ -74,7 +99,15 @@ th {
                 🚗 {$info.placa|default:"---"}
             </small>
 
+            {* 🔥 STATUS PAGAMENTO *}
+            {if $info.pago}
+                <small class="status-pago">✔ Pago</small>
+            {else}
+                <small class="status-pendente">💰 Pendente</small>
+            {/if}
+
         </td>
+
     {/if}
 
 {else}

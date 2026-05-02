@@ -1,18 +1,18 @@
 <?php
-/* Smarty version 4.1.0, created on 2026-05-02 09:58:56
+/* Smarty version 4.1.0, created on 2026-05-02 17:01:42
   from 'C:\xampp\htdocs\diversos_php\agenda_modelo04\templates\agenda.tpl' */
 
 /* @var Smarty_Internal_Template $_smarty_tpl */
 if ($_smarty_tpl->_decodeProperties($_smarty_tpl, array (
   'version' => '4.1.0',
-  'unifunc' => 'content_69f5f510326880_51387840',
+  'unifunc' => 'content_69f65826767b85_12575515',
   'has_nocache_code' => false,
   'file_dependency' => 
   array (
     'a7fb4a14abd040d6a4a62b24887da3e3ffcfb659' => 
     array (
       0 => 'C:\\xampp\\htdocs\\diversos_php\\agenda_modelo04\\templates\\agenda.tpl',
-      1 => 1775765457,
+      1 => 1777752093,
       2 => 'file',
     ),
   ),
@@ -20,7 +20,7 @@ if ($_smarty_tpl->_decodeProperties($_smarty_tpl, array (
   array (
   ),
 ),false)) {
-function content_69f5f510326880_51387840 (Smarty_Internal_Template $_smarty_tpl) {
+function content_69f65826767b85_12575515 (Smarty_Internal_Template $_smarty_tpl) {
 ?><style>
 body {
     font-family: Arial;
@@ -104,10 +104,9 @@ th {
     </div>
 </div>
 
-<!-- AGENDA CARREGA VIA AJAX -->
+<!-- AGENDA -->
 <div id="agendaContainer"></div>
 
-<!-- JQUERY -->
 <?php echo '<script'; ?>
  src="https://code.jquery.com/jquery-3.6.0.min.js"><?php echo '</script'; ?>
 >
@@ -128,21 +127,11 @@ function carregarAgenda(){
 }
 
 // =============================
-// 📅 TROCA DE DATA
-// =============================
-$('#dataAgenda').on('change', function(){
-    carregarAgenda();
-});
+$('#dataAgenda').on('change', carregarAgenda);
 
 // =============================
-// ⏱ AUTO REFRESH (30s)
-// =============================
-setInterval(function(){
-    carregarAgenda();
-}, 30000);
+setInterval(carregarAgenda, 30000);
 
-// =============================
-// 🟢 NOVO AGENDAMENTO
 // =============================
 $(document).on('click', '.livre', function(){
 
@@ -158,8 +147,6 @@ $(document).on('click', '.livre', function(){
 });
 
 // =============================
-// 🔴 DETALHES
-// =============================
 $(document).on('click', '.ocupado', function(){
 
     let id = $(this).data('id');
@@ -172,16 +159,12 @@ $(document).on('click', '.ocupado', function(){
 });
 
 // =============================
-// ❌ FECHAR MODAL
-// =============================
 $('#modalBg').click(function(e){
     if(e.target.id === 'modalBg'){
         $(this).hide();
     }
 });
 
-// =============================
-// 🚀 INICIALIZA
 // =============================
 carregarAgenda();
 

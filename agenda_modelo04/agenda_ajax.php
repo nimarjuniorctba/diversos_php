@@ -12,7 +12,7 @@ $acao = $_GET['acao'] ?? '';
 
 
 // =============================
-// 📅 LISTA DA AGENDA
+// 📅 LISTA DA AGENDA (COM PAGO)
 // =============================
 if ($acao == 'lista') {
 
@@ -39,7 +39,15 @@ if ($acao == 'lista') {
             s.ser_duracao,
             s.ser_cor,
             c.cli_nome,
-            v.vei_placa
+            v.vei_placa,
+
+            (
+                SELECT COUNT(*) 
+                FROM mod_financeiro f
+                WHERE f.age_id_fk = a.age_id
+                AND f.fin_status = 'a'
+            ) AS ja_pago
+
         FROM mod_agendamentos a
         LEFT JOIN mod_servicos s ON s.ser_id = a.ser_id_fk
         LEFT JOIN mod_clientes c ON c.cli_id = a.cli_id_fk
@@ -79,7 +87,8 @@ if ($acao == 'lista') {
                     'cliente'  => $a['cli_nome'],
                     'servico'  => $a['ser_nome'],
                     'placa'    => $a['vei_placa'],
-                    'cor'      => $a['ser_cor']
+                    'cor'      => $a['ser_cor'],
+                    'pago'     => ($a['ja_pago'] > 0)
                 ];
 
                 $rowspan[$hid][$a['pis_id_fk']] = ($i == 0) ? $slots : 0;
@@ -119,13 +128,12 @@ if ($acao == 'veiculos') {
 
 
 // =============================
-// 📄 DESCRIÇÃO (CORRIGIDO)
+// 📄 DESCRIÇÃO
 // =============================
 if ($acao == 'descricao') {
 
     $id = (int)($_GET['id'] ?? 0);
 
-    // 👉 SEM ID = NOVO AGENDAMENTO
     if (!$id) {
         header("Location: agenda_ajax.php?acao=cadastrar&data=".$_GET['data']."&hora=".$_GET['hora']."&pista=".$_GET['pista']);
         exit;
@@ -156,17 +164,16 @@ if ($acao == 'descricao') {
     $stmt->execute([$id]);
     $dados = $stmt->fetch(PDO::FETCH_ASSOC);
 
-    // 👉 NÃO EXISTE → CADASTRO
     if (!$dados) {
         header("Location: agenda_ajax.php?acao=cadastrar");
         exit;
     }
 
-    // CALCULA FIM
+    // calcula fim
     $inicio = strtotime($dados['hor_hora']);
     $dados['hora_fim'] = date('H:i', $inicio + ($dados['ser_duracao'] * 60));
 
-    // VERIFICA PAGAMENTO
+    // verifica pagamento
     $stmt = $pdo->prepare("
         SELECT COUNT(*) 
         FROM mod_financeiro 
@@ -177,11 +184,12 @@ if ($acao == 'descricao') {
 
     $jaPago = $stmt->fetchColumn() > 0;
 
-    // 👉 EVITA ERRO NO SMARTY
-    $smarty->assign('JA_PAGO', $jaPago);
+    // garante que sempre existe
     $dados['JA_PAGO'] = $jaPago;
 
     $smarty->assign('AG', $dados);
+    $smarty->assign('JA_PAGO', $jaPago);
+
     $smarty->display('templates/agenda/descricao.tpl');
     exit;
 }
@@ -207,10 +215,12 @@ if ($acao == 'pagar') {
             exit;
         }
 
-        // evita duplicar pagamento
+        // evita duplicado
         $stmt = $pdo->prepare("
-            SELECT COUNT(*) FROM mod_financeiro 
-            WHERE age_id_fk = ? AND fin_status='a'
+            SELECT COUNT(*) 
+            FROM mod_financeiro 
+            WHERE age_id_fk = ? 
+            AND fin_status='a'
         ");
         $stmt->execute([$id]);
 
@@ -239,7 +249,7 @@ if ($acao == 'pagar') {
         $stmt->execute([
             $ag['age_data'],
             $ag['age_valor_final'],
-            $ag['age_desconto'],
+            $ag['age_desconto'] ?? 0,
             $ag['age_valor_final'],
             'Pagamento Agenda',
             $id,
@@ -280,7 +290,7 @@ if ($acao == 'cancelar') {
 
 
 // =============================
-// 🟢 CADASTRO (CORRIGIDO)
+// 🟢 CADASTRO
 // =============================
 if ($acao == 'cadastrar') {
 
@@ -289,7 +299,6 @@ if ($acao == 'cadastrar') {
     $pistas   = $pdo->query("SELECT pis_id, pis_nome FROM mod_pistas WHERE pis_status='a'")->fetchAll(PDO::FETCH_ASSOC);
     $horarios = $pdo->query("SELECT hor_id, hor_hora FROM mod_horarios")->fetchAll(PDO::FETCH_ASSOC);
 
-    // 👉 EVITA ERROS NO TEMPLATE
     $smarty->assign('horaSelecionada', $_GET['hora'] ?? '');
     $smarty->assign('pistaSelecionada', $_GET['pista'] ?? '');
     $smarty->assign('dataSelecionada', $_GET['data'] ?? date('Y-m-d'));
