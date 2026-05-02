@@ -29,8 +29,18 @@
 Cancelar Agendamento
 </button>
 
+{if !$JA_PAGO}
+<button id="btnPagar" data-id="{$AG.age_id}" style="background:green;color:#fff;">
+💰 Fazer Pagamento
+</button>
+{else}
+<p style="color:green;font-weight:bold;">✅ Pagamento já realizado</p>
+{/if}
+
 {literal}
 <script>
+
+// CANCELAR
 $('#btnCancelar').click(function(){
 
     if(!confirm('Cancelar agendamento?')) return;
@@ -47,6 +57,29 @@ $('#btnCancelar').click(function(){
     },'json');
 
 });
-</script>
 
+
+// PAGAR
+$('#btnPagar').click(function(){
+
+    if(!confirm('Confirmar pagamento?')) return;
+
+    $.post('agenda_ajax.php?acao=pagar',{
+        id: $(this).data('id')
+    }, function(res){
+
+        if(res.status === 'ok'){
+            alert('Pagamento registrado!');
+            location.reload();
+        }
+
+        if(res.status === 'erro'){
+            alert('Erro ao pagar');
+        }
+
+    },'json');
+
+});
+
+</script>
 {/literal}

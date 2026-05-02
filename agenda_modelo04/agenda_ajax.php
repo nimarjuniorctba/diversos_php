@@ -12,27 +12,24 @@ $acao = $_GET['acao'] ?? '';
 
 
 // =============================
-// 📅 LISTA DA AGENDA (AJAX)
+// 📅 LISTA DA AGENDA
 // =============================
 if ($acao == 'lista') {
 
     $data = $_GET['data'] ?? date('Y-m-d');
 
-    // HORÁRIOS
     $horarios = $pdo->query("
         SELECT hor_id, hor_hora 
         FROM mod_horarios 
         ORDER BY hor_id
     ")->fetchAll(PDO::FETCH_ASSOC);
 
-    // PISTAS
     $pistas = $pdo->query("
         SELECT pis_id, pis_nome 
         FROM mod_pistas 
         WHERE pis_status='a'
     ")->fetchAll(PDO::FETCH_ASSOC);
 
-    // AGENDAMENTOS
     $stmt = $pdo->prepare("
         SELECT 
             a.age_id,
@@ -54,13 +51,11 @@ if ($acao == 'lista') {
     $stmt->execute([$data]);
     $agendamentos = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
-    // MAPA
     $mapa = [];
     foreach ($horarios as $i => $h) {
         $mapa[$h['hor_id']] = $i;
     }
 
-    // OCUPADOS
     $ocupados = [];
     $rowspan  = [];
 
@@ -97,14 +92,13 @@ if ($acao == 'lista') {
     $smarty->assign('OCUPADOS', $ocupados);
     $smarty->assign('ROWSPAN', $rowspan);
 
-    // ✅ CAMINHO CORRETO
     $smarty->display('templates/agenda/agenda_lista.tpl');
     exit;
 }
 
 
 // =============================
-// 🚗 LISTAR VEÍCULOS
+// 🚗 VEÍCULOS
 // =============================
 if ($acao == 'veiculos') {
 
@@ -125,102 +119,17 @@ if ($acao == 'veiculos') {
 
 
 // =============================
-// 💾 SALVAR AGENDAMENTO
-// =============================
-if ($acao == 'salvar') {
-
-    $data       = $_POST['data'];
-    $cliente    = $_POST['cliente'];
-    $veiculo    = $_POST['veiculo'];
-    $servico    = $_POST['servico'];
-    $pista      = $_POST['pista'];
-    $hora       = $_POST['hora'];
-    $comentario = $_POST['comentario'] ?? '';
-
-    try {
-
-        $stmt = $pdo->prepare("
-            SELECT ser_valor, ser_duracao 
-            FROM mod_servicos 
-            WHERE ser_id = ?
-        ");
-        $stmt->execute([$servico]);
-        $serv = $stmt->fetch(PDO::FETCH_ASSOC);
-
-        if (!$serv) {
-            echo json_encode(['status'=>'erro','msg'=>'Serviço inválido']);
-            exit;
-        }
-
-        $slots = ceil($serv['ser_duracao'] / 5);
-        $horaFim = $hora + $slots;
-
-        $stmt = $pdo->prepare("
-            INSERT INTO mod_agendamentos (
-                age_data,
-                age_status,
-                age_valor_final,
-                age_hora_inicio_fk,
-                age_hora_fim_fk,
-                pis_id_fk,
-                ser_id_fk,
-                cli_id_fk,
-                vei_id_fk
-            ) VALUES (?, 'a', ?, ?, ?, ?, ?, ?, ?)
-        ");
-
-        $stmt->execute([
-            $data,
-            $serv['ser_valor'],
-            $hora,
-            $horaFim,
-            $pista,
-            $servico,
-            $cliente,
-            $veiculo
-        ]);
-
-        $age_id = $pdo->lastInsertId();
-
-        if (!empty($comentario)) {
-
-            $stmt = $pdo->prepare("
-                INSERT INTO mod_comentario (
-                    com_comentario,
-                    age_id_fk,
-                    cli_id_fk,
-                    vei_id_fk
-                ) VALUES (?, ?, ?, ?)
-            ");
-
-            $stmt->execute([
-                $comentario,
-                $age_id,
-                $cliente,
-                $veiculo
-            ]);
-        }
-
-        echo json_encode(['status' => 'ok']);
-        exit;
-
-    } catch (Exception $e) {
-
-        echo json_encode([
-            'status' => 'erro',
-            'msg' => $e->getMessage()
-        ]);
-        exit;
-    }
-}
-
-
-// =============================
-// 🔴 DESCRIÇÃO
+// 📄 DESCRIÇÃO (CORRIGIDO)
 // =============================
 if ($acao == 'descricao') {
 
-    $id = (int)$_GET['id'];
+    $id = (int)($_GET['id'] ?? 0);
+
+    // 👉 SEM ID = NOVO AGENDAMENTO
+    if (!$id) {
+        header("Location: agenda_ajax.php?acao=cadastrar&data=".$_GET['data']."&hora=".$_GET['hora']."&pista=".$_GET['pista']);
+        exit;
+    }
 
     $stmt = $pdo->prepare("
         SELECT 
@@ -247,58 +156,149 @@ if ($acao == 'descricao') {
     $stmt->execute([$id]);
     $dados = $stmt->fetch(PDO::FETCH_ASSOC);
 
+    // 👉 NÃO EXISTE → CADASTRO
+    if (!$dados) {
+        header("Location: agenda_ajax.php?acao=cadastrar");
+        exit;
+    }
+
+    // CALCULA FIM
     $inicio = strtotime($dados['hor_hora']);
     $dados['hora_fim'] = date('H:i', $inicio + ($dados['ser_duracao'] * 60));
 
-    $smarty->assign('AG', $dados);
+    // VERIFICA PAGAMENTO
+    $stmt = $pdo->prepare("
+        SELECT COUNT(*) 
+        FROM mod_financeiro 
+        WHERE age_id_fk = ? 
+        AND fin_status = 'a'
+    ");
+    $stmt->execute([$id]);
 
-    // ✅ CAMINHO CORRETO
+    $jaPago = $stmt->fetchColumn() > 0;
+
+    // 👉 EVITA ERRO NO SMARTY
+    $smarty->assign('JA_PAGO', $jaPago);
+    $dados['JA_PAGO'] = $jaPago;
+
+    $smarty->assign('AG', $dados);
     $smarty->display('templates/agenda/descricao.tpl');
     exit;
 }
 
 
 // =============================
-// 🟢 FORMULÁRIO CADASTRO
+// 💰 PAGAMENTO
+// =============================
+if ($acao == 'pagar') {
+
+    header('Content-Type: application/json');
+
+    try {
+
+        $id = $_POST['id'];
+
+        $stmt = $pdo->prepare("SELECT * FROM mod_agendamentos WHERE age_id = ?");
+        $stmt->execute([$id]);
+        $ag = $stmt->fetch(PDO::FETCH_ASSOC);
+
+        if (!$ag) {
+            echo json_encode(['status'=>'erro']);
+            exit;
+        }
+
+        // evita duplicar pagamento
+        $stmt = $pdo->prepare("
+            SELECT COUNT(*) FROM mod_financeiro 
+            WHERE age_id_fk = ? AND fin_status='a'
+        ");
+        $stmt->execute([$id]);
+
+        if ($stmt->fetchColumn() > 0) {
+            echo json_encode(['status'=>'ok']);
+            exit;
+        }
+
+        $stmt = $pdo->prepare("
+            INSERT INTO mod_financeiro (
+                fin_data,
+                fin_tipo,
+                fin_origem,
+                fin_valor,
+                fin_desconto,
+                fin_valor_final,
+                fin_descricao,
+                age_id_fk,
+                ser_id_fk,
+                cli_id_fk,
+                vei_id_fk,
+                pis_id_fk
+            ) VALUES (?, 'entrada', 'agenda', ?, ?, ?, ?, ?, ?, ?, ?, ?)
+        ");
+
+        $stmt->execute([
+            $ag['age_data'],
+            $ag['age_valor_final'],
+            $ag['age_desconto'],
+            $ag['age_valor_final'],
+            'Pagamento Agenda',
+            $id,
+            $ag['ser_id_fk'],
+            $ag['cli_id_fk'],
+            $ag['vei_id_fk'],
+            $ag['pis_id_fk']
+        ]);
+
+        echo json_encode(['status'=>'ok']);
+        exit;
+
+    } catch (Exception $e) {
+        echo json_encode(['status'=>'erro','msg'=>$e->getMessage()]);
+        exit;
+    }
+}
+
+
+// =============================
+// ❌ CANCELAR
+// =============================
+if ($acao == 'cancelar') {
+
+    header('Content-Type: application/json');
+
+    $id = $_POST['id'];
+
+    $pdo->prepare("
+        UPDATE mod_agendamentos 
+        SET age_status='c' 
+        WHERE age_id=?
+    ")->execute([$id]);
+
+    echo json_encode(['status'=>'ok']);
+    exit;
+}
+
+
+// =============================
+// 🟢 CADASTRO (CORRIGIDO)
 // =============================
 if ($acao == 'cadastrar') {
 
-    $clientes = $pdo->query("
-        SELECT cli_id, cli_nome 
-        FROM mod_clientes 
-        WHERE cli_status='a'
-        ORDER BY cli_nome
-    ")->fetchAll(PDO::FETCH_ASSOC);
+    $clientes = $pdo->query("SELECT cli_id, cli_nome FROM mod_clientes WHERE cli_status='a'")->fetchAll(PDO::FETCH_ASSOC);
+    $servicos = $pdo->query("SELECT ser_id, ser_nome FROM mod_servicos WHERE ser_status='a'")->fetchAll(PDO::FETCH_ASSOC);
+    $pistas   = $pdo->query("SELECT pis_id, pis_nome FROM mod_pistas WHERE pis_status='a'")->fetchAll(PDO::FETCH_ASSOC);
+    $horarios = $pdo->query("SELECT hor_id, hor_hora FROM mod_horarios")->fetchAll(PDO::FETCH_ASSOC);
 
-    $servicos = $pdo->query("
-        SELECT ser_id, ser_nome, ser_cor 
-        FROM mod_servicos 
-        WHERE ser_status='a'
-        ORDER BY ser_nome
-    ")->fetchAll(PDO::FETCH_ASSOC);
-
-    $pistas = $pdo->query("
-        SELECT pis_id, pis_nome 
-        FROM mod_pistas 
-        WHERE pis_status='a'
-    ")->fetchAll(PDO::FETCH_ASSOC);
-
-    $horarios = $pdo->query("
-        SELECT hor_id, hor_hora 
-        FROM mod_horarios 
-        ORDER BY hor_hora
-    ")->fetchAll(PDO::FETCH_ASSOC);
+    // 👉 EVITA ERROS NO TEMPLATE
+    $smarty->assign('horaSelecionada', $_GET['hora'] ?? '');
+    $smarty->assign('pistaSelecionada', $_GET['pista'] ?? '');
+    $smarty->assign('dataSelecionada', $_GET['data'] ?? date('Y-m-d'));
 
     $smarty->assign('CLIENTES', $clientes);
     $smarty->assign('SERVICOS', $servicos);
     $smarty->assign('PISTAS', $pistas);
     $smarty->assign('HORARIOS', $horarios);
 
-    $smarty->assign('horaSelecionada', $_GET['hora'] ?? '');
-    $smarty->assign('pistaSelecionada', $_GET['pista'] ?? '');
-    $smarty->assign('dataSelecionada', $_GET['data'] ?? date('Y-m-d'));
-
-    // ✅ CAMINHO CORRETO
     $smarty->display('templates/agenda/cadastrar_agenda.tpl');
     exit;
 }

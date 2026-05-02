@@ -1,11 +1,11 @@
 <?php
-/* Smarty version 4.1.0, created on 2026-04-11 09:45:45
+/* Smarty version 4.1.0, created on 2026-05-02 10:05:16
   from 'C:\xampp\htdocs\diversos_php\agenda_modelo04\templates\agenda\cadastrar_agenda.tpl' */
 
 /* @var Smarty_Internal_Template $_smarty_tpl */
 if ($_smarty_tpl->_decodeProperties($_smarty_tpl, array (
   'version' => '4.1.0',
-  'unifunc' => 'content_69da427943f0b7_29574840',
+  'unifunc' => 'content_69f5f68c5568a3_03074468',
   'has_nocache_code' => false,
   'file_dependency' => 
   array (
@@ -20,7 +20,7 @@ if ($_smarty_tpl->_decodeProperties($_smarty_tpl, array (
   array (
   ),
 ),false)) {
-function content_69da427943f0b7_29574840 (Smarty_Internal_Template $_smarty_tpl) {
+function content_69f5f68c5568a3_03074468 (Smarty_Internal_Template $_smarty_tpl) {
 ?><h2>Novo Agendamento</h2>
 
 <form id="formAgenda">
