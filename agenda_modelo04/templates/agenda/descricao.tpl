@@ -30,9 +30,24 @@ Cancelar Agendamento
 </button>
 
 {if !$JA_PAGO}
+
+<hr>
+
+<label><strong>Forma de Pagamento:</strong></label><br>
+
+<select id="formaPagamento">
+    <option value="">Selecione</option>
+    {foreach from=$FORMAS item=f}
+        <option value="{$f.for_id}">{$f.for_nome}</option>
+    {/foreach}
+</select>
+
+<br><br>
+
 <button id="btnPagar" data-id="{$AG.age_id}" style="background:green;color:#fff;">
 💰 Fazer Pagamento
 </button>
+
 {else}
 <p style="color:green;font-weight:bold;">✅ Pagamento já realizado</p>
 {/if}
@@ -40,7 +55,9 @@ Cancelar Agendamento
 {literal}
 <script>
 
-// CANCELAR
+// =============================
+// ❌ CANCELAR
+// =============================
 $('#btnCancelar').click(function(){
 
     if(!confirm('Cancelar agendamento?')) return;
@@ -59,13 +76,23 @@ $('#btnCancelar').click(function(){
 });
 
 
-// PAGAR
+// =============================
+// 💰 PAGAR (COM FORMA)
+// =============================
 $('#btnPagar').click(function(){
+
+    let forma = $('#formaPagamento').val();
+
+    if(!forma){
+        alert('Selecione a forma de pagamento');
+        return;
+    }
 
     if(!confirm('Confirmar pagamento?')) return;
 
     $.post('agenda_ajax.php?acao=pagar',{
-        id: $(this).data('id')
+        id: $(this).data('id'),
+        forma: forma
     }, function(res){
 
         if(res.status === 'ok'){
@@ -74,7 +101,7 @@ $('#btnPagar').click(function(){
         }
 
         if(res.status === 'erro'){
-            alert('Erro ao pagar');
+            alert(res.msg || 'Erro ao pagar');
         }
 
     },'json');

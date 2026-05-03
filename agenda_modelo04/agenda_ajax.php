@@ -169,11 +169,9 @@ if ($acao == 'descricao') {
         exit;
     }
 
-    // calcula fim
     $inicio = strtotime($dados['hor_hora']);
     $dados['hora_fim'] = date('H:i', $inicio + ($dados['ser_duracao'] * 60));
 
-    // verifica pagamento
     $stmt = $pdo->prepare("
         SELECT COUNT(*) 
         FROM mod_financeiro 
@@ -184,9 +182,16 @@ if ($acao == 'descricao') {
 
     $jaPago = $stmt->fetchColumn() > 0;
 
-    // garante que sempre existe
+    // 🔥 FORMAS DE PAGAMENTO (ADICIONADO)
+    $formas = $pdo->query("
+        SELECT for_id, for_nome 
+        FROM mod_forma_pagamento 
+        WHERE for_status='a'
+    ")->fetchAll(PDO::FETCH_ASSOC);
+
     $dados['JA_PAGO'] = $jaPago;
 
+    $smarty->assign('FORMAS', $formas);
     $smarty->assign('AG', $dados);
     $smarty->assign('JA_PAGO', $jaPago);
 
@@ -196,7 +201,7 @@ if ($acao == 'descricao') {
 
 
 // =============================
-// 💰 PAGAMENTO
+// 💰 PAGAMENTO (COM FORMA)
 // =============================
 if ($acao == 'pagar') {
 
@@ -204,7 +209,13 @@ if ($acao == 'pagar') {
 
     try {
 
-        $id = $_POST['id'];
+        $id    = $_POST['id'];
+        $forma = $_POST['forma'] ?? null;
+
+        if (!$forma) {
+            echo json_encode(['status'=>'erro','msg'=>'Selecione a forma de pagamento']);
+            exit;
+        }
 
         $stmt = $pdo->prepare("SELECT * FROM mod_agendamentos WHERE age_id = ?");
         $stmt->execute([$id]);
@@ -215,7 +226,6 @@ if ($acao == 'pagar') {
             exit;
         }
 
-        // evita duplicado
         $stmt = $pdo->prepare("
             SELECT COUNT(*) 
             FROM mod_financeiro 
@@ -242,8 +252,9 @@ if ($acao == 'pagar') {
                 ser_id_fk,
                 cli_id_fk,
                 vei_id_fk,
-                pis_id_fk
-            ) VALUES (?, 'entrada', 'agenda', ?, ?, ?, ?, ?, ?, ?, ?, ?)
+                pis_id_fk,
+                for_id_fk
+            ) VALUES (?, 'entrada', 'agenda', ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
         ");
 
         $stmt->execute([
@@ -256,7 +267,8 @@ if ($acao == 'pagar') {
             $ag['ser_id_fk'],
             $ag['cli_id_fk'],
             $ag['vei_id_fk'],
-            $ag['pis_id_fk']
+            $ag['pis_id_fk'],
+            $forma
         ]);
 
         echo json_encode(['status'=>'ok']);

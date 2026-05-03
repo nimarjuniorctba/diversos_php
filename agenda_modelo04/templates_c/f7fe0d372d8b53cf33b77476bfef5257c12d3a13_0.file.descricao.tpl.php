@@ -1,18 +1,18 @@
 <?php
-/* Smarty version 4.1.0, created on 2026-05-02 09:58:57
+/* Smarty version 4.1.0, created on 2026-05-03 08:53:48
   from 'C:\xampp\htdocs\diversos_php\agenda_modelo04\templates\agenda\descricao.tpl' */
 
 /* @var Smarty_Internal_Template $_smarty_tpl */
 if ($_smarty_tpl->_decodeProperties($_smarty_tpl, array (
   'version' => '4.1.0',
-  'unifunc' => 'content_69f5f511a71207_15692514',
+  'unifunc' => 'content_69f7374c875800_03241004',
   'has_nocache_code' => false,
   'file_dependency' => 
   array (
     'f7fe0d372d8b53cf33b77476bfef5257c12d3a13' => 
     array (
       0 => 'C:\\xampp\\htdocs\\diversos_php\\agenda_modelo04\\templates\\agenda\\descricao.tpl',
-      1 => 1777726091,
+      1 => 1777809214,
       2 => 'file',
     ),
   ),
@@ -20,7 +20,7 @@ if ($_smarty_tpl->_decodeProperties($_smarty_tpl, array (
   array (
   ),
 ),false)) {
-function content_69f5f511a71207_15692514 (Smarty_Internal_Template $_smarty_tpl) {
+function content_69f7374c875800_03241004 (Smarty_Internal_Template $_smarty_tpl) {
 ?><h2>Detalhes do Agendamento</h2>
 
 <p><strong>Cliente:</strong> <?php echo $_smarty_tpl->tpl_vars['AG']->value['cli_nome'];?>
@@ -65,10 +65,34 @@ Cancelar Agendamento
 </button>
 
 <?php if (!$_smarty_tpl->tpl_vars['JA_PAGO']->value) {?>
+
+<hr>
+
+<label><strong>Forma de Pagamento:</strong></label><br>
+
+<select id="formaPagamento">
+    <option value="">Selecione</option>
+    <?php
+$_from = $_smarty_tpl->smarty->ext->_foreach->init($_smarty_tpl, $_smarty_tpl->tpl_vars['FORMAS']->value, 'f');
+$_smarty_tpl->tpl_vars['f']->do_else = true;
+if ($_from !== null) foreach ($_from as $_smarty_tpl->tpl_vars['f']->value) {
+$_smarty_tpl->tpl_vars['f']->do_else = false;
+?>
+        <option value="<?php echo $_smarty_tpl->tpl_vars['f']->value['for_id'];?>
+"><?php echo $_smarty_tpl->tpl_vars['f']->value['for_nome'];?>
+</option>
+    <?php
+}
+$_smarty_tpl->smarty->ext->_foreach->restore($_smarty_tpl, 1);?>
+</select>
+
+<br><br>
+
 <button id="btnPagar" data-id="<?php echo $_smarty_tpl->tpl_vars['AG']->value['age_id'];?>
 " style="background:green;color:#fff;">
 💰 Fazer Pagamento
 </button>
+
 <?php } else { ?>
 <p style="color:green;font-weight:bold;">✅ Pagamento já realizado</p>
 <?php }?>
@@ -77,7 +101,9 @@ Cancelar Agendamento
 <?php echo '<script'; ?>
 >
 
-// CANCELAR
+// =============================
+// ❌ CANCELAR
+// =============================
 $('#btnCancelar').click(function(){
 
     if(!confirm('Cancelar agendamento?')) return;
@@ -96,13 +122,23 @@ $('#btnCancelar').click(function(){
 });
 
 
-// PAGAR
+// =============================
+// 💰 PAGAR (COM FORMA)
+// =============================
 $('#btnPagar').click(function(){
+
+    let forma = $('#formaPagamento').val();
+
+    if(!forma){
+        alert('Selecione a forma de pagamento');
+        return;
+    }
 
     if(!confirm('Confirmar pagamento?')) return;
 
     $.post('agenda_ajax.php?acao=pagar',{
-        id: $(this).data('id')
+        id: $(this).data('id'),
+        forma: forma
     }, function(res){
 
         if(res.status === 'ok'){
@@ -111,7 +147,7 @@ $('#btnPagar').click(function(){
         }
 
         if(res.status === 'erro'){
-            alert('Erro ao pagar');
+            alert(res.msg || 'Erro ao pagar');
         }
 
     },'json');

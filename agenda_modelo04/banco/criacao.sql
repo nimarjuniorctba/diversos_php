@@ -42,7 +42,7 @@ CREATE TABLE IF NOT EXISTS agenda.mod_servicos (
     ser_valor DECIMAL(10,2),
     ser_duracao INT,
 	ser_cor VARCHAR(7) DEFAULT '#dc3545',
-    ser_status VARCHAR(1) DEFAULT 'a' COMMENT 'a=ativo;i=inativo;e=excluido',
+    ser_status VARCHAR(1) DEFAULT 'a' COMMENT 'a=ativo;c=cancelado;e=excluido',
 	ser_dt_cadastro DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP	
 );
 
@@ -93,7 +93,7 @@ CREATE TABLE mod_veiculos (
 CREATE TABLE IF NOT EXISTS agenda.mod_agendamentos (
     age_id INT AUTO_INCREMENT PRIMARY KEY,
     age_data DATE NOT NULL,
-    age_status VARCHAR(1) DEFAULT 'a',
+    age_status VARCHAR(1) DEFAULT 'a'  COMMENT 'a=ativo;c=cancelado;e=excluido',
     age_desconto DECIMAL(10,2),
     age_valor_final DECIMAL(10,2),
 	age_hora_inicio_fk INT COMMENT 'mod_horarios',
