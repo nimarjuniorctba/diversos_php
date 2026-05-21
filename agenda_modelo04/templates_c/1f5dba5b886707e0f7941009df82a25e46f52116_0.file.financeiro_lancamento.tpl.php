@@ -1,18 +1,18 @@
 <?php
-/* Smarty version 4.1.0, created on 2026-05-03 09:15:04
+/* Smarty version 4.1.0, created on 2026-05-20 23:37:46
   from 'C:\xampp\htdocs\diversos_php\agenda_modelo04\templates\financeiro_lancamento.tpl' */
 
 /* @var Smarty_Internal_Template $_smarty_tpl */
 if ($_smarty_tpl->_decodeProperties($_smarty_tpl, array (
   'version' => '4.1.0',
-  'unifunc' => 'content_69f73c48e42965_69620439',
+  'unifunc' => 'content_6a0e6ffa339089_22794240',
   'has_nocache_code' => false,
   'file_dependency' => 
   array (
     '1f5dba5b886707e0f7941009df82a25e46f52116' => 
     array (
       0 => 'C:\\xampp\\htdocs\\diversos_php\\agenda_modelo04\\templates\\financeiro_lancamento.tpl',
-      1 => 1776223396,
+      1 => 1779331043,
       2 => 'file',
     ),
   ),
@@ -20,7 +20,7 @@ if ($_smarty_tpl->_decodeProperties($_smarty_tpl, array (
   array (
   ),
 ),false)) {
-function content_69f73c48e42965_69620439 (Smarty_Internal_Template $_smarty_tpl) {
+function content_6a0e6ffa339089_22794240 (Smarty_Internal_Template $_smarty_tpl) {
 ?><!DOCTYPE html>
 <html lang="pt-br">
 <head>
@@ -145,6 +145,7 @@ th { background:#333; color:#fff; }
     <div id="selectServico">
         <label>Serviço:</label>
         <select name="servico">
+			<option value="" selected>Escolher servico</option>
             <?php
 $_from = $_smarty_tpl->smarty->ext->_foreach->init($_smarty_tpl, $_smarty_tpl->tpl_vars['SERVICOS']->value, 's');
 $_smarty_tpl->tpl_vars['s']->do_else = true;

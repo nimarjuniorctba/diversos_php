@@ -120,6 +120,7 @@ th { background:#333; color:#fff; }
     <div id="selectServico">
         <label>Serviço:</label>
         <select name="servico">
+			<option value="" selected>Escolha um serviço</option>
             {foreach from=$SERVICOS item=s}
                 <option value="{$s.ser_id}">{$s.ser_nome}</option>
             {/foreach}
