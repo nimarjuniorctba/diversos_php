@@ -1,3 +1,5 @@
+{include file="abas.tpl"}
+
 <h2>Cadastro Pista</h2>
 
 <form method="POST">

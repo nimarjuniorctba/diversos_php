@@ -1,26 +1,27 @@
 <?php
-/* Smarty version 4.1.0, created on 2026-05-20 23:37:46
+/* Smarty version 4.1.0, created on 2026-05-24 09:01:43
   from 'C:\xampp\htdocs\diversos_php\agenda_modelo04\templates\financeiro_lancamento.tpl' */
 
 /* @var Smarty_Internal_Template $_smarty_tpl */
 if ($_smarty_tpl->_decodeProperties($_smarty_tpl, array (
   'version' => '4.1.0',
-  'unifunc' => 'content_6a0e6ffa339089_22794240',
+  'unifunc' => 'content_6a12e8a7b06e54_50370215',
   'has_nocache_code' => false,
   'file_dependency' => 
   array (
     '1f5dba5b886707e0f7941009df82a25e46f52116' => 
     array (
       0 => 'C:\\xampp\\htdocs\\diversos_php\\agenda_modelo04\\templates\\financeiro_lancamento.tpl',
-      1 => 1779331043,
+      1 => 1779624072,
       2 => 'file',
     ),
   ),
   'includes' => 
   array (
+    'file:abas.tpl' => 1,
   ),
 ),false)) {
-function content_6a0e6ffa339089_22794240 (Smarty_Internal_Template $_smarty_tpl) {
+function content_6a12e8a7b06e54_50370215 (Smarty_Internal_Template $_smarty_tpl) {
 ?><!DOCTYPE html>
 <html lang="pt-br">
 <head>
@@ -33,11 +34,11 @@ function content_6a0e6ffa339089_22794240 (Smarty_Internal_Template $_smarty_tpl)
 
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 
+<?php $_smarty_tpl->_subTemplateRender("file:abas.tpl", $_smarty_tpl->cache_id, $_smarty_tpl->compile_id, 0, $_smarty_tpl->cache_lifetime, array(), 0, false);
+?>
+
 <style>
 body { font-family: Arial; margin: 0; }
-
-.menu { background:#333; padding:15px; }
-.menu a { color:#fff; margin-right:15px; text-decoration:none; font-weight:bold; }
 
 .container { padding:20px; max-width:800px; margin:auto; }
 
@@ -117,10 +118,6 @@ th { background:#333; color:#fff; }
 
 <body>
 
-<div class="menu">
-    <a href="#">🏠 Home</a>
-    <a href="#">💰 Lançamentos</a>
-</div>
 
 <div class="container">
 
@@ -145,7 +142,7 @@ th { background:#333; color:#fff; }
     <div id="selectServico">
         <label>Serviço:</label>
         <select name="servico">
-			<option value="" selected>Escolher servico</option>
+			<option value="" selected>Escolha um serviço</option>
             <?php
 $_from = $_smarty_tpl->smarty->ext->_foreach->init($_smarty_tpl, $_smarty_tpl->tpl_vars['SERVICOS']->value, 's');
 $_smarty_tpl->tpl_vars['s']->do_else = true;

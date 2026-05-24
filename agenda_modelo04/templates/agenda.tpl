@@ -1,3 +1,4 @@
+{include file="abas.tpl"}
 <style>
 body {
     font-family: Arial;
@@ -65,8 +66,8 @@ th {
     border-radius:8px;
 }
 </style>
-
-<h2>Agenda</h2>
+<br>
+<h2 hidden>Agenda</h2>
 
 <div class="topo">
     <label><strong>Data:</strong></label>

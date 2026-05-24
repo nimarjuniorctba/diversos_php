@@ -1,33 +1,29 @@
 <?php
-/* Smarty version 4.1.0, created on 2026-05-19 23:43:38
+/* Smarty version 4.1.0, created on 2026-05-24 08:59:10
   from 'C:\xampp\htdocs\diversos_php\agenda_modelo04\templates\dashboard.tpl' */
 
 /* @var Smarty_Internal_Template $_smarty_tpl */
 if ($_smarty_tpl->_decodeProperties($_smarty_tpl, array (
   'version' => '4.1.0',
-  'unifunc' => 'content_6a0d1fda68cd49_92197993',
+  'unifunc' => 'content_6a12e80e50d8a8_85269333',
   'has_nocache_code' => false,
   'file_dependency' => 
   array (
     'e4a3df9e42e0a7d088f2d054f8989aa1d56cd26f' => 
     array (
       0 => 'C:\\xampp\\htdocs\\diversos_php\\agenda_modelo04\\templates\\dashboard.tpl',
-      1 => 1775913198,
+      1 => 1779623948,
       2 => 'file',
     ),
   ),
   'includes' => 
   array (
+    'file:abas.tpl' => 1,
   ),
 ),false)) {
-function content_6a0d1fda68cd49_92197993 (Smarty_Internal_Template $_smarty_tpl) {
-?><!DOCTYPE html>
-<html lang="pt-br">
-<head>
-<meta charset="UTF-8">
-<title>Dashboard</title>
-
-<?php echo '<script'; ?>
+function content_6a12e80e50d8a8_85269333 (Smarty_Internal_Template $_smarty_tpl) {
+$_smarty_tpl->_subTemplateRender("file:abas.tpl", $_smarty_tpl->cache_id, $_smarty_tpl->compile_id, 0, $_smarty_tpl->cache_lifetime, array(), 0, false);
+echo '<script'; ?>
  src="https://cdn.jsdelivr.net/npm/chart.js"><?php echo '</script'; ?>
 >
 
@@ -39,18 +35,7 @@ body {
     margin: 0;
 }
 
-/* MENU */
-.menu {
-    background: #333;
-    padding: 15px;
-}
 
-.menu a {
-    color: #fff;
-    margin-right: 15px;
-    text-decoration: none;
-    font-weight: bold;
-}
 
 /* CONTAINER */
 .container {
@@ -137,15 +122,6 @@ th {
 </head>
 <body>
 
-<!-- MENU -->
-<div class="menu">
-    <a href="home.php">🏠 Home</a>
-    <a href="cad_clientes.php">👤 Clientes</a>
-    <a href="cad_servico.php">🧼 Serviços</a>
-    <a href="cad_pista.php">🚗 Pistas</a>
-    <a href="cad_veiculo.php">🚘 Veículos</a>
-    <a href="agenda.php">📅 Agenda</a>
-</div>
 
 <div class="container">
 

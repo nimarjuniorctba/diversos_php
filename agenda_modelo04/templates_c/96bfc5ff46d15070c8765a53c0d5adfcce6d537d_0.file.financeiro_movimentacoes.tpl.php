@@ -1,26 +1,27 @@
 <?php
-/* Smarty version 4.1.0, created on 2026-05-03 09:15:11
+/* Smarty version 4.1.0, created on 2026-05-24 09:03:13
   from 'C:\xampp\htdocs\diversos_php\agenda_modelo04\templates\financeiro_movimentacoes.tpl' */
 
 /* @var Smarty_Internal_Template $_smarty_tpl */
 if ($_smarty_tpl->_decodeProperties($_smarty_tpl, array (
   'version' => '4.1.0',
-  'unifunc' => 'content_69f73c4f7bdbe3_71474295',
+  'unifunc' => 'content_6a12e901123c51_75257842',
   'has_nocache_code' => false,
   'file_dependency' => 
   array (
     '96bfc5ff46d15070c8765a53c0d5adfcce6d537d' => 
     array (
       0 => 'C:\\xampp\\htdocs\\diversos_php\\agenda_modelo04\\templates\\financeiro_movimentacoes.tpl',
-      1 => 1776254404,
+      1 => 1779624186,
       2 => 'file',
     ),
   ),
   'includes' => 
   array (
+    'file:abas.tpl' => 1,
   ),
 ),false)) {
-function content_69f73c4f7bdbe3_71474295 (Smarty_Internal_Template $_smarty_tpl) {
+function content_6a12e901123c51_75257842 (Smarty_Internal_Template $_smarty_tpl) {
 ?><!DOCTYPE html>
 <html lang="pt-br">
 <head>
@@ -34,10 +35,11 @@ function content_69f73c4f7bdbe3_71474295 (Smarty_Internal_Template $_smarty_tpl)
  src="https://cdn.jsdelivr.net/npm/chart.js"><?php echo '</script'; ?>
 >
 
+<?php $_smarty_tpl->_subTemplateRender("file:abas.tpl", $_smarty_tpl->cache_id, $_smarty_tpl->compile_id, 0, $_smarty_tpl->cache_lifetime, array(), 0, false);
+?>
+
 <style>
 body { font-family: Arial; margin:0; }
-.menu { background:#333; padding:15px; }
-.menu a { color:#fff; margin-right:15px; text-decoration:none; font-weight:bold; }
 .container { padding:20px; max-width:1100px; margin:auto; }
 
 .filtro { display:flex; gap:10px; flex-wrap:wrap; }
@@ -83,10 +85,6 @@ th { background:#333; color:#fff; }
 </head>
 <body>
 
-<div class="menu">
-    <a href="#">🏠 Home</a>
-    <a href="#">📊 Movimentações</a>
-</div>
 
 <div class="container">
 

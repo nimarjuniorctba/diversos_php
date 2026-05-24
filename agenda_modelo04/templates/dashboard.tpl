@@ -1,9 +1,5 @@
-<!DOCTYPE html>
-<html lang="pt-br">
-<head>
-<meta charset="UTF-8">
-<title>Dashboard</title>
 
+{include file="abas.tpl"}
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
 <style>
@@ -14,18 +10,7 @@ body {
     margin: 0;
 }
 
-/* MENU */
-.menu {
-    background: #333;
-    padding: 15px;
-}
 
-.menu a {
-    color: #fff;
-    margin-right: 15px;
-    text-decoration: none;
-    font-weight: bold;
-}
 
 /* CONTAINER */
 .container {
@@ -112,15 +97,6 @@ th {
 </head>
 <body>
 
-<!-- MENU -->
-<div class="menu">
-    <a href="home.php">🏠 Home</a>
-    <a href="cad_clientes.php">👤 Clientes</a>
-    <a href="cad_servico.php">🧼 Serviços</a>
-    <a href="cad_pista.php">🚗 Pistas</a>
-    <a href="cad_veiculo.php">🚘 Veículos</a>
-    <a href="agenda.php">📅 Agenda</a>
-</div>
 
 <div class="container">
 

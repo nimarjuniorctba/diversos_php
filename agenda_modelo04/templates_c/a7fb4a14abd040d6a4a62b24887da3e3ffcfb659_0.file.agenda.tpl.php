@@ -1,27 +1,30 @@
 <?php
-/* Smarty version 4.1.0, created on 2026-05-02 17:01:42
+/* Smarty version 4.1.0, created on 2026-05-24 09:17:32
   from 'C:\xampp\htdocs\diversos_php\agenda_modelo04\templates\agenda.tpl' */
 
 /* @var Smarty_Internal_Template $_smarty_tpl */
 if ($_smarty_tpl->_decodeProperties($_smarty_tpl, array (
   'version' => '4.1.0',
-  'unifunc' => 'content_69f65826767b85_12575515',
+  'unifunc' => 'content_6a12ec5c415c76_20338699',
   'has_nocache_code' => false,
   'file_dependency' => 
   array (
     'a7fb4a14abd040d6a4a62b24887da3e3ffcfb659' => 
     array (
       0 => 'C:\\xampp\\htdocs\\diversos_php\\agenda_modelo04\\templates\\agenda.tpl',
-      1 => 1777752093,
+      1 => 1779625050,
       2 => 'file',
     ),
   ),
   'includes' => 
   array (
+    'file:abas.tpl' => 1,
   ),
 ),false)) {
-function content_69f65826767b85_12575515 (Smarty_Internal_Template $_smarty_tpl) {
-?><style>
+function content_6a12ec5c415c76_20338699 (Smarty_Internal_Template $_smarty_tpl) {
+$_smarty_tpl->_subTemplateRender("file:abas.tpl", $_smarty_tpl->cache_id, $_smarty_tpl->compile_id, 0, $_smarty_tpl->cache_lifetime, array(), 0, false);
+?>
+<style>
 body {
     font-family: Arial;
     background: #f4f4f4;
@@ -88,8 +91,8 @@ th {
     border-radius:8px;
 }
 </style>
-
-<h2>Agenda</h2>
+<br>
+<h2 hidden>Agenda</h2>
 
 <div class="topo">
     <label><strong>Data:</strong></label>

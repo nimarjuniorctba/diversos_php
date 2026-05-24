@@ -8,11 +8,10 @@
 
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 
+{include file="abas.tpl"}
+
 <style>
 body { font-family: Arial; margin: 0; }
-
-.menu { background:#333; padding:15px; }
-.menu a { color:#fff; margin-right:15px; text-decoration:none; font-weight:bold; }
 
 .container { padding:20px; max-width:800px; margin:auto; }
 
@@ -92,10 +91,6 @@ th { background:#333; color:#fff; }
 
 <body>
 
-<div class="menu">
-    <a href="#">🏠 Home</a>
-    <a href="#">💰 Lançamentos</a>
-</div>
 
 <div class="container">
 

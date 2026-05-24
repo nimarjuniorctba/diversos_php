@@ -7,10 +7,10 @@
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
+{include file="abas.tpl"}
+
 <style>
 body { font-family: Arial; margin:0; }
-.menu { background:#333; padding:15px; }
-.menu a { color:#fff; margin-right:15px; text-decoration:none; font-weight:bold; }
 .container { padding:20px; max-width:1100px; margin:auto; }
 
 .filtro { display:flex; gap:10px; flex-wrap:wrap; }
@@ -56,10 +56,6 @@ th { background:#333; color:#fff; }
 </head>
 <body>
 
-<div class="menu">
-    <a href="#">🏠 Home</a>
-    <a href="#">📊 Movimentações</a>
-</div>
 
 <div class="container">
 
