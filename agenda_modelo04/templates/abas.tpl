@@ -150,7 +150,7 @@ body {
                 <input type="checkbox" id="sub1" hidden>
 
                 <ul class="submenu">
-                    <li><a href="#" hidden>Agenda</a></li>
+                    <li><a href="cadastrar_agendamento.php" hidden>Agenda</a></li>
 					<li><a href="cad_clientes.php">Cliente</a></li>
                     <li><a href="cad_servico.php">Serviços</a></li>
 					<li><a href="cad_pista.php">Pista</a></li>

@@ -295,6 +295,12 @@ if ($acao == 'cancelar') {
         SET age_status='c' 
         WHERE age_id=?
     ")->execute([$id]);
+	
+    $pdo->prepare("
+        UPDATE mod_financeiro 
+        SET fin_status='c' 
+        WHERE age_id_fk=?
+    ")->execute([$id]);	
 
     echo json_encode(['status'=>'ok']);
     exit;
@@ -322,4 +328,166 @@ if ($acao == 'cadastrar') {
 
     $smarty->display('templates/agenda/cadastrar_agenda.tpl');
     exit;
+}
+
+// =============================
+// 💾 SALVAR AGENDAMENTO
+// =============================
+if ($acao == 'salvar') {
+
+    header('Content-Type: application/json');
+
+    try {
+
+        $data       = $_POST['data'] ?? '';
+        $cliente    = $_POST['cliente'] ?? 0;
+        $veiculo    = $_POST['veiculo'] ?? 0;
+        $servico    = $_POST['servico'] ?? 0;
+        $pista      = $_POST['pista'] ?? 0;
+        $hora       = $_POST['hora'] ?? 0;
+        $comentario = trim($_POST['comentario'] ?? '');
+
+        // validação
+        if (
+            !$data ||
+            !$cliente ||
+            !$veiculo ||
+            !$servico ||
+            !$pista ||
+            !$hora
+        ) {
+
+            echo json_encode([
+                'status' => 'erro',
+                'msg'    => 'Preencha todos os campos'
+            ]);
+
+            exit;
+        }
+
+        // busca serviço
+        $stmt = $pdo->prepare("
+            SELECT *
+            FROM mod_servicos
+            WHERE ser_id = ?
+        ");
+
+        $stmt->execute([$servico]);
+
+        $ser = $stmt->fetch(PDO::FETCH_ASSOC);
+
+        if (!$ser) {
+
+            echo json_encode([
+                'status' => 'erro',
+                'msg'    => 'Serviço inválido'
+            ]);
+
+            exit;
+        }
+
+        // verifica conflito
+        $stmt = $pdo->prepare("
+            SELECT COUNT(*)
+            FROM mod_agendamentos
+            WHERE age_data = ?
+            AND pis_id_fk = ?
+            AND age_hora_inicio_fk = ?
+            AND age_status = 'a'
+        ");
+
+        $stmt->execute([
+            $data,
+            $pista,
+            $hora
+        ]);
+
+        if ($stmt->fetchColumn() > 0) {
+
+            echo json_encode([
+                'status' => 'erro',
+                'msg'    => 'Horário já ocupado'
+            ]);
+
+            exit;
+        }
+
+        // salva agendamento
+        $stmt = $pdo->prepare("
+            INSERT INTO mod_agendamentos (
+
+                age_data,
+                age_hora_inicio_fk,
+
+                cli_id_fk,
+                vei_id_fk,
+                ser_id_fk,
+                pis_id_fk,
+
+                age_desconto,
+                age_valor_final,
+                age_status
+
+            ) VALUES (
+
+                ?,
+                ?,
+
+                ?,
+                ?,
+                ?,
+                ?,
+
+                0,
+                ?,
+                'a'
+            )
+        ");
+
+        $stmt->execute([
+
+            $data,
+            $hora,
+
+            $cliente,
+            $veiculo,
+            $servico,
+            $pista,
+
+            $ser['ser_valor']
+        ]);
+
+        $ageId = $pdo->lastInsertId();
+
+        // comentário
+        if ($comentario != '') {
+
+            $stmt = $pdo->prepare("
+                INSERT INTO mod_comentario (
+                    age_id_fk,
+                    com_comentario
+                ) VALUES (?, ?)
+            ");
+
+            $stmt->execute([
+                $ageId,
+                $comentario
+            ]);
+        }
+
+        echo json_encode([
+            'status' => 'ok'
+        ]);
+
+        exit;
+
+    } catch (Exception $e) {
+
+        echo json_encode([
+            'status' => 'erro',
+            'msg'    => $e->getMessage()
+        ]);
+
+        exit;
+    }
 }

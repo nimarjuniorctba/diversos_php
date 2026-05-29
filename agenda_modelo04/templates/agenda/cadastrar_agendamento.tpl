@@ -1,3 +1,4 @@
+{include file="abas.tpl"}
 <style>
 body {
     font-family: Arial;

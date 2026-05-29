@@ -1,18 +1,18 @@
 <?php
-/* Smarty version 4.1.0, created on 2026-05-24 09:18:03
+/* Smarty version 4.1.0, created on 2026-05-24 09:36:36
   from 'C:\xampp\htdocs\diversos_php\agenda_modelo04\templates\abas.tpl' */
 
 /* @var Smarty_Internal_Template $_smarty_tpl */
 if ($_smarty_tpl->_decodeProperties($_smarty_tpl, array (
   'version' => '4.1.0',
-  'unifunc' => 'content_6a12ec7b7cd555_66888311',
+  'unifunc' => 'content_6a12f0d46f16c8_54685219',
   'has_nocache_code' => false,
   'file_dependency' => 
   array (
     '5e6d125174dfbed1fd27dc701383af36e5de9aa9' => 
     array (
       0 => 'C:\\xampp\\htdocs\\diversos_php\\agenda_modelo04\\templates\\abas.tpl',
-      1 => 1779625080,
+      1 => 1779626187,
       2 => 'file',
     ),
   ),
@@ -20,7 +20,7 @@ if ($_smarty_tpl->_decodeProperties($_smarty_tpl, array (
   array (
   ),
 ),false)) {
-function content_6a12ec7b7cd555_66888311 (Smarty_Internal_Template $_smarty_tpl) {
+function content_6a12f0d46f16c8_54685219 (Smarty_Internal_Template $_smarty_tpl) {
 ?>
 <style>
 * {
@@ -155,7 +155,7 @@ body {
 
 <body>
 
-<nav class="navbar" style=" padding: 0px;">
+<nav class="navbar">
     <div class="nav-container">
         <div class="logo">AgendaFinanceira</div>
 
@@ -173,7 +173,7 @@ body {
                 <input type="checkbox" id="sub1" hidden>
 
                 <ul class="submenu">
-                    <li><a href="#" hidden>Agenda</a></li>
+                    <li><a href="cadastrar_agendamento.php" hidden>Agenda</a></li>
 					<li><a href="cad_clientes.php">Cliente</a></li>
                     <li><a href="cad_servico.php">Serviços</a></li>
 					<li><a href="cad_pista.php">Pista</a></li>
