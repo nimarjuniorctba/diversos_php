@@ -1,0 +1,24 @@
+RETORNO:
+'{"messaging_product":"whatsapp","contacts":[{"input":"554195478268","wa_id":"554195478268"}],"messages":[{"id":"wamid.HBgMNTU0MTk1NDc4MjY4FQIAERgSODVCQjJDMjRBMUUwNUFFRTc1AA=="}]}'
+
+ERRO:
+
+
+RETORNO:
+'{"error":{"message":"(#100) The parameter messaging_product is required.","type":"OAuthException","code":100,"fbtrace_id":"Am43dfZQfuHQTSZolHoFWkI"}}'
+
+ERRO:
+
+
+RETORNO:
+'{"messaging_product":"whatsapp","contacts":[{"input":"554195478268","wa_id":"554195478268"}],"messages":[{"id":"wamid.HBgMNTU0MTk1NDc4MjY4FQIAERgSMzI3N0E4RkJCRjNCRjcwNDJEAA=="}]}'
+
+ERRO:
+
+
+RETORNO:
+'{"error":{"message":"(#100) The parameter messaging_product is required.","type":"OAuthException","code":100,"fbtrace_id":"At-2uHKzEhuMab6LFA_nY1g"}}'
+
+ERRO:
+
+
