@@ -133,6 +133,13 @@ try {
                 "Em breve alguém responderá.";
 
         break;
+		
+        case 'agendamento':
+
+            $resposta =
+                "Vou agendar pravc.";
+
+        break;		
 
 
         default:
