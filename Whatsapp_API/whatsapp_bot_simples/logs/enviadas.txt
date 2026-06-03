@@ -149,3 +149,30 @@ Seus agendamentos:
 15/06/2026 09:00
 
 --------------------------------------------------
+03/06/2026 16:43:37
+Para: 554195478268
+O que deseja?
+
+1 - Agendamento
+2 - Ver agendamentos
+3 - Cancelar agendamento
+4 - Falar com atendente
+--------------------------------------------------
+03/06/2026 16:53:05
+Para: 554195478268
+O que deseja?
+
+1 - Agendamento
+2 - Ver agendamentos
+3 - Cancelar agendamento
+4 - Falar com atendente
+--------------------------------------------------
+03/06/2026 16:54:49
+Para: 554195478268
+O que deseja?
+
+1 - Agendamento
+2 - Ver agendamentos
+3 - Cancelar agendamento
+4 - Falar com atendente
+--------------------------------------------------
