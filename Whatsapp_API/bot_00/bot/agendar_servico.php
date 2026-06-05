@@ -1,7 +1,10 @@
 <?php
 
 $servicos = $pdo->query("
-    SELECT ser_id, ser_nome
+    SELECT
+        ser_id,
+        ser_nome,
+        ser_valor
     FROM mod_servicos
     WHERE ser_status='a'
     ORDER BY ser_nome
@@ -18,6 +21,7 @@ if(!$servicos){
 }
 
 $rows = [];
+
 
 foreach($servicos as $s){
 

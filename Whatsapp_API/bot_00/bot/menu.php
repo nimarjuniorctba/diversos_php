@@ -38,15 +38,32 @@ switch(trim($texto)){
         exit;
 
     default:
-        
 
-        enviarTexto(
+        enviarImagem(
             $telefone,
-            "🚗 *BOXLAV*\n\n".
-            "1 - Agendar serviço\n".
-            "2 - Meus agendamentos\n".
-            "3 - Cancelar agendamento\n".
-            "9 - Falar com atendente"
+            'https://tableful-cuddly-federal.ngrok-free.dev/boxlav/sistema.boxlav.com.br/imagens/config/logo.png',
+            '🚗 Alpha Lavacar Cic - Faça já sua reserva'
+        );
+
+        enviarLista(
+            $telefone,
+            'Veja as opções',
+            'Selecione uma opção para começar:',
+            'Menu Principal',
+            [
+                [
+                    'id' => '1',
+                    'title' => 'Agendar serviço'
+                ],
+                [
+                    'id' => '2',
+                    'title' => 'Meus agendamentos'
+                ],
+                [
+                    'id' => '3',
+                    'title' => 'Cancelar agendamento'
+                ]
+            ]
         );
 
         exit;

@@ -5,7 +5,7 @@ if (!isset($pdo) || !isset($telefone)) {
 }
 
 $servicos = $pdo->query("
-    SELECT ser_id, ser_nome
+    SELECT ser_id, ser_nome, ser_valor
     FROM mod_servicos
     WHERE ser_status='a'
     ORDER BY ser_nome
@@ -27,12 +27,14 @@ foreach($servicos as $s){
 
     $rows[] = [
         'id' => 'servico_'.$s['ser_id'],
-        'title' => $s['ser_nome']
+        'title' => mb_substr($s['ser_nome'], 0, 24),
+        'descricao' => 'R$ '.$s['ser_valor'] 
     ];
 }
 
-try {
 
+try {
+    
     enviarLista(
         $telefone,
         'Agendamento',

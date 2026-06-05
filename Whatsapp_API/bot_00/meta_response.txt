@@ -1,13 +1,2 @@
-{"messaging_product":"whatsapp","contacts":[{"input":"554195478268","wa_id":"554195478268"}],"messages":[{"id":"wamid.HBgMNTU0MTk1NDc4MjY4FQIAERgSQjA2N0M0OUM1QzcyQ0RGQjMzAA=="}]}
-{"messaging_product":"whatsapp","contacts":[{"input":"554195478268","wa_id":"554195478268"}],"messages":[{"id":"wamid.HBgMNTU0MTk1NDc4MjY4FQIAERgSN0M1MEYwQjUyQjhCM0QxRjQ3AA=="}]}
-{"messaging_product":"whatsapp","contacts":[{"input":"554195478268","wa_id":"554195478268"}],"messages":[{"id":"wamid.HBgMNTU0MTk1NDc4MjY4FQIAERgSM0Q3NUUyNzA4RjMwNEI0REYyAA=="}]}
-{"messaging_product":"whatsapp","contacts":[{"input":"554195478268","wa_id":"554195478268"}],"messages":[{"id":"wamid.HBgMNTU0MTk1NDc4MjY4FQIAERgSMERFOTJEM0NCQjcwOTVFM0NGAA=="}]}
-{"messaging_product":"whatsapp","contacts":[{"input":"554195478268","wa_id":"554195478268"}],"messages":[{"id":"wamid.HBgMNTU0MTk1NDc4MjY4FQIAERgSMkFERTdCMDc3MTU3RTlFRjIxAA=="}]}
-{"messaging_product":"whatsapp","contacts":[{"input":"554195478268","wa_id":"554195478268"}],"messages":[{"id":"wamid.HBgMNTU0MTk1NDc4MjY4FQIAERgSMERFNjNDOTAzOUQ0NDNBODE0AA=="}]}
-{"messaging_product":"whatsapp","contacts":[{"input":"554195478268","wa_id":"554195478268"}],"messages":[{"id":"wamid.HBgMNTU0MTk1NDc4MjY4FQIAERgSOTc3QTNGQTBCQjA5N0Y4MTUxAA=="}]}
-{"messaging_product":"whatsapp","contacts":[{"input":"554195478268","wa_id":"554195478268"}],"messages":[{"id":"wamid.HBgMNTU0MTk1NDc4MjY4FQIAERgSNjFGNzc1RDA3RDFFRjNDRjM1AA=="}]}
-{"messaging_product":"whatsapp","contacts":[{"input":"554195478268","wa_id":"554195478268"}],"messages":[{"id":"wamid.HBgMNTU0MTk1NDc4MjY4FQIAERgSRkRENEM4RTVFNzg2QjQzQjNEAA=="}]}
-{"messaging_product":"whatsapp","contacts":[{"input":"554195478268","wa_id":"554195478268"}],"messages":[{"id":"wamid.HBgMNTU0MTk1NDc4MjY4FQIAERgSNjVFMTg3MEI1Q0E4N0Y1MDk0AA=="}]}
-{"messaging_product":"whatsapp","contacts":[{"input":"554195478268","wa_id":"554195478268"}],"messages":[{"id":"wamid.HBgMNTU0MTk1NDc4MjY4FQIAERgSQUIxRjI3RjM3NEY4RjEyRUQ4AA=="}]}
-{"messaging_product":"whatsapp","contacts":[{"input":"554195478268","wa_id":"554195478268"}],"messages":[{"id":"wamid.HBgMNTU0MTk1NDc4MjY4FQIAERgSMkFDMjMzOTEwNTAyQTk3NjhGAA=="}]}
-{"messaging_product":"whatsapp","contacts":[{"input":"554195478268","wa_id":"554195478268"}],"messages":[{"id":"wamid.HBgMNTU0MTk1NDc4MjY4FQIAERgSMDQzOEEzQUQxQzA1QkZFNEJCAA=="}]}
+{"error":{"message":"Authentication Error","code":190,"type":"OAuthException","fbtrace_id":"Av09bZeMPyM7H32Jj6P2a-E"}}
+{"messaging_product":"whatsapp","contacts":[{"input":"554195478268","wa_id":"554195478268"}],"messages":[{"id":"wamid.HBgMNTU0MTk1NDc4MjY4FQIAERgSQzg0NjBDNTczQTNBOTMyNzUyAA=="}]}

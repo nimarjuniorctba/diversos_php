@@ -3,10 +3,8 @@
 // ========================================
 // CONFIGURAÇÕES META
 // ========================================
+include  "config.php";
 
-define('TOKEN_WHATSAPP', 'EAAa0Nz4eIgIBRinEjhAQdHVYq5NvpyOpkPkkdyyHGCIwg2rV8Ies1AZBmDPgL4iUNEIEV5IcPn608k6j1rkvs7ZBxV9B1xSnECt1AwJBNpY1DAqdCaDScAEzV7NsDUYBTTUFFxcuguVvN33DThiIgWRkgltGkKe3Q6eqa4QiZCRBEFhSozXgweCCsZCUszdXgiraejflQFsnlPFO7JdVKUiGkKdRslIJCm8evm2fmc3o16rMqJBePDwMkFZBzZAlovdYHMhZB2HZBrx8dQ2FZBehX7A7W8sZCQskixc0KNzKeq');
-
-define('PHONE_NUMBER_ID', '100330039635650');
 
 
 // ========================================
@@ -17,7 +15,7 @@ function whatsappRequest(array $payload)
 {
     $url =
         "https://graph.facebook.com/v23.0/"
-        . PHONE_NUMBER_ID
+        . WPP_PHONE_ID
         . "/messages";
 
     $ch = curl_init($url);
@@ -30,7 +28,7 @@ function whatsappRequest(array $payload)
 
         CURLOPT_HTTPHEADER => [
 
-            'Authorization: Bearer ' . TOKEN_WHATSAPP,
+            'Authorization: Bearer ' . WPP_TOKEN,
             'Content-Type: application/json'
 
         ],
@@ -243,3 +241,5 @@ function enviarDocumento(
         ]
     ]);
 }
+
+

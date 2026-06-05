@@ -52,7 +52,12 @@ if(isset($msg['text']['body'])){
 
 if(isset($msg['interactive']['list_reply']['id'])){
 
-    $texto = $msg['interactive']['list_reply']['id'];
+    $texto = trim($msg['interactive']['list_reply']['id']);
+}
+
+if(isset($msg['interactive']['button_reply']['id'])){
+
+    $texto = trim($msg['interactive']['button_reply']['id']);
 }
 
 if (isset($msg['interactive']['list_reply']['id'])) {
@@ -92,12 +97,20 @@ if (isset($msg['interactive']['list_reply']['id'])) {
 
         $sessao['ses_etapa'] = 'escolher_horario';
     }
+
+
+    // =========================
+    // HORÁRIO SUGERIDO
+    // =========================
+    if (str_starts_with($id, 'hora_')) {
+
+        $hora = str_replace('hora_', '', $id);
+
+        $texto = $hora;
+    }   
+    
 }
 
-if(isset($msg['interactive']['button_reply']['id'])){
-
-    $texto = $msg['interactive']['button_reply']['id'];
-}
 
 
 // =====================================
@@ -160,13 +173,6 @@ switch ($sessao['ses_etapa']) {
     break;
 
     default:
-        
-                file_put_contents(
-            'debug.txt',
-            "Entrou MENU".PHP_EOL,
-            FILE_APPEND
-        );
-        
         require 'bot/menu.php';
     break;
 }
