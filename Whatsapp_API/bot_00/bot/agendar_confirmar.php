@@ -98,6 +98,7 @@ $pdo->prepare("
         pis_id_fk,
         ser_id_fk,
         cli_id_fk,
+        vei_id_fk,
         age_valor_final,
         age_status
     ) VALUES (
@@ -106,7 +107,8 @@ $pdo->prepare("
         ?,
         ?,
         ?,
-        NULL,
+        ?,
+        ?,
         ?,
         'a'
     )
@@ -115,6 +117,8 @@ $pdo->prepare("
     $fim,
     $sessao['ses_pista_fk'],
     $sessao['ses_servico_fk'],
+    $sessao['ses_cliente_fk'],
+    $sessao['ses_veiculo_fk'],
     $servico['ser_valor']
 ]);
 

@@ -18,6 +18,9 @@ CREATE TABLE mod_whatsapp_sessao (
     ses_nome_cliente VARCHAR(100) NULL,
 
     ses_atendente TINYINT DEFAULT 0,
-
+    ses_nome_temp VARCHAR(255) NULL,
+    ses_modelo_temp VARCHAR(255) NULL,    
+    ses_marca_temp VARCHAR(255) NULL,
+    ses_cor_temp VARCHAR(255) NULL,
     ses_dt_atualizacao DATETIME DEFAULT CURRENT_TIMESTAMP
 );

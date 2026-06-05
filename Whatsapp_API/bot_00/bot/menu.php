@@ -4,13 +4,35 @@ switch(trim($texto)){
 
     case '1':
 
+        $sessaoAtual = $pdo->prepare("
+            SELECT *
+            FROM mod_whatsapp_sessao
+            WHERE ses_telefone = ?
+        ");
+
+        $sessaoAtual->execute([$telefone]);
+
+        $sessaoAtual = $sessaoAtual->fetch(PDO::FETCH_ASSOC);
+
+        if (!empty($sessaoAtual['ses_cliente_fk'])) {
+
+            $pdo->prepare("
+                UPDATE mod_whatsapp_sessao
+                SET ses_etapa='escolher_veiculo'
+                WHERE ses_telefone=?
+            ")->execute([$telefone]);
+
+            require __DIR__.'/escolher_veiculo.php';
+            exit;
+        }
+
         $pdo->prepare("
             UPDATE mod_whatsapp_sessao
-            SET ses_etapa='escolher_servico'
+            SET ses_etapa='cadastrar_cliente'
             WHERE ses_telefone=?
         ")->execute([$telefone]);
 
-        require __DIR__.'/agendar.php';
+        require __DIR__.'/cadastrar_cliente.php';
         exit;
 
     case '2':

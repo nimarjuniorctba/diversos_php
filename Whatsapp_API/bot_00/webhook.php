@@ -61,8 +61,22 @@ if(isset($msg['interactive']['button_reply']['id'])){
 }
 
 if (isset($msg['interactive']['list_reply']['id'])) {
-
+    
     $id = $msg['interactive']['list_reply']['id'];
+
+    if ($id == 'novo_veiculo') {
+
+        $pdo->prepare("
+            UPDATE mod_whatsapp_sessao
+            SET
+                ses_etapa = 'cadastro_veiculo_modelo',
+                ses_modelo_temp = NULL
+            WHERE ses_telefone = ?
+        ")->execute([$telefone]);
+
+        require __DIR__.'/bot/cadastrar_veiculo.php';
+        exit;
+    }
 
     // =========================
     // SERVIÇO
@@ -97,6 +111,24 @@ if (isset($msg['interactive']['list_reply']['id'])) {
 
         $sessao['ses_etapa'] = 'escolher_horario';
     }
+    
+    if (str_starts_with($id, 'veiculo_')) {
+
+        $veiculo_id = str_replace('veiculo_', '', $id);
+
+        $pdo->prepare("
+            UPDATE mod_whatsapp_sessao
+            SET
+                ses_veiculo_fk = ?,
+                ses_etapa = 'escolher_servico'
+            WHERE ses_telefone = ?
+        ")->execute([
+            $veiculo_id,
+            $telefone
+        ]);
+
+        $sessao['ses_etapa'] = 'escolher_servico';
+    }    
 
 
     // =========================
@@ -132,21 +164,45 @@ $sessao = $stmt->fetch(PDO::FETCH_ASSOC);
 // =====================================
 if (!$sessao) {
 
-    $pdo->prepare("
-        INSERT INTO mod_whatsapp_sessao
-        (
-            ses_telefone,
-            ses_etapa
-        )
-        VALUES
-        (
-            ?,
-            'menu'
-        )
-    ")->execute([$telefone]);
+    // procura cliente pelo telefone
+    $cliente = $pdo->prepare("
+        SELECT cli_id
+        FROM mod_clientes
+        WHERE cli_telefone = ?
+        LIMIT 1
+    ");
+
+    $cliente->execute([$telefone]);
+
+    $cliente = $cliente->fetch(PDO::FETCH_ASSOC);
+
+    $cli_id = $cliente['cli_id'] ?? null;
+    $etapa = $cli_id
+        ? 'menu'
+        : 'cadastrar_cliente';
+
+   $pdo->prepare("
+       INSERT INTO mod_whatsapp_sessao
+       (
+           ses_telefone,
+           ses_cliente_fk,
+           ses_etapa
+       )
+       VALUES
+       (
+           ?,
+           ?,
+           ?
+       )
+   ")->execute([
+       $telefone,
+       $cli_id,
+       $etapa
+   ]);
 
     $sessao = [
-        'ses_etapa' => 'menu'
+        'ses_etapa' => $cli_id ? 'menu' : 'cadastrar_cliente',
+        'ses_cliente_fk' => $cli_id
     ];
 }
 
@@ -155,6 +211,23 @@ if (!$sessao) {
 // ROTEADOR
 // =====================================
 switch ($sessao['ses_etapa']) {
+    
+    case 'cadastro_nome':
+    case 'cadastrar_cliente':
+    case 'cadastro_email':
+        require 'bot/cadastrar_cliente.php';
+    break;
+
+    case 'cadastro_veiculo_modelo':
+    case 'cadastro_veiculo_marca':
+    case 'cadastro_veiculo_cor':
+    case 'cadastro_veiculo_placa':
+        require 'bot/cadastrar_veiculo.php';
+    break;
+
+    case 'escolher_veiculo':
+        require 'bot/escolher_veiculo.php';
+    break;
 
     case 'escolher_servico':
         require 'bot/agendar.php';
