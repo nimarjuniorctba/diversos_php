@@ -19,6 +19,12 @@ if (!$sessao) {
     exit;
 }
 
+file_put_contents(
+    'confirmar_debug.txt',
+    "Entrou confirmar\n",
+    FILE_APPEND
+);
+
 // =====================================================
 // BUSCA DURAÇÃO DO SERVIÇO
 // =====================================================
@@ -34,6 +40,12 @@ if (!$servico) {
     enviarTexto($telefone, "❌ Serviço inválido.");
     exit;
 }
+
+file_put_contents(
+    'confirmar_debug.txt',
+    "Servico OK\n",
+    FILE_APPEND
+);
 
 // =====================================================
 // HORÁRIO
@@ -54,13 +66,13 @@ $stmt = $pdo->prepare("
     )
 ");
 
-$check->execute([
+$stmt->execute([
     $sessao['ses_pista_fk'],
     $inicio,
     $inicio
 ]);
 
-if ($check->fetchColumn() > 0) {
+if ($stmt->fetchColumn() > 0) {
 
     enviarTexto($telefone,
         "❌ Esse horário acabou de ser ocupado.\nTente outro horário."
@@ -105,6 +117,12 @@ $pdo->prepare("
     $sessao['ses_servico_fk'],
     $servico['ser_valor']
 ]);
+
+file_put_contents(
+    'confirmar_debug.txt',
+    "Inseriu\n",
+    FILE_APPEND
+);
 
 // =====================================================
 // LIMPA / RESETA SESSÃO

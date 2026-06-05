@@ -157,7 +157,7 @@ if ($conflito == 0) {
         SET ses_horario_fk = ?,
             ses_etapa = 'confirmar_agendamento'
         WHERE ses_telefone = ?
-    ")->execute([$inicio, $telefone]);
+    ")->execute([$inicio_id, $telefone]);
 
     enviarBotoes(
         $telefone,

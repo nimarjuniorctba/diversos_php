@@ -1,23 +1,4 @@
-CREATE TABLE mod_whatsapp_sessao (
-    ses_id INT AUTO_INCREMENT PRIMARY KEY,
 
-    ses_telefone VARCHAR(20) NOT NULL,
-
-    ses_fluxo VARCHAR(50) DEFAULT 'menu',
-
-    ses_etapa VARCHAR(50) DEFAULT '',
-
-    ses_referencia INT DEFAULT NULL,
-
-    ses_status CHAR(1) DEFAULT 'a',
-
-    ses_data DATETIME DEFAULT CURRENT_TIMESTAMP,
-
-    UNIQUE KEY (ses_telefone)
-);
-
-
--- nova 
 
 CREATE TABLE mod_whatsapp_sessao (
 
