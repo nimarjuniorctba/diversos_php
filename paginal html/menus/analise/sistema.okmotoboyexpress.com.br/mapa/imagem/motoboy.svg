@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-label="Motoboy">
+  <g fill="none" stroke="#fff" stroke-linecap="round" stroke-linejoin="round" stroke-width="4">
+    <circle cx="17" cy="46" r="8"/>
+    <circle cx="49" cy="46" r="8"/>
+    <path d="M17 46h13l8-16h8l5 16M28 46l-8-18h10l8 18M24 21h10"/>
+    <path d="M42 30h9l-2-8h-9z" fill="#fff" stroke="none"/>
+  </g>
+</svg>
+

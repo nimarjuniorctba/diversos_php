@@ -1,0 +1,202 @@
+Módulo de clientes criado seguindo o padrão Smarty e as classes existentes.
+Incluído:
+Listagem da tabela mod_clientes
+Nome PF ou razão social PJ
+ID, tipo, celular, e-mail, data e status
+Editar, excluir, ativar e desativar
+Cadastro completo PF/PJ
+E-mail bloqueado durante edição
+cli_admin e emp_id_fk definidos pelo PHP
+Busca instantânea
+Máscaras com jQuery
+Popup de exclusão
+Layout responsivo
+Principais arquivos:
+[clientes.php](/C:/xampp/htdocs/diversos_php/paginal html/menus/clientes.php)
+[lista.tpl](/C:/xampp/htdocs/diversos_php/paginal html/menus/template/clientes/lista.tpl)
+[formulario.tpl](/C:/xampp/htdocs/diversos_php/paginal html/menus/template/clientes/formulario.tpl)
+[clientes.js](/C:/xampp/htdocs/diversos_php/paginal html/menus/assets/js/pages/clientes.js)
+[acesso_clientes.class.php](/C:/xampp/htdocs/diversos_php/paginal html/menus/classes/acesso/acesso_clientes.class.php)
+
+
+
+-----------------------------
+
+Módulo de condutores concluído.
+Incluído:
+Menu “Condutor” abaixo de “Clientes”
+Listagem dos 7 condutores existentes
+Nome, telefone, e-mail, placa e data
+Status cadastral ativo/inativo
+Status do aplicativo online/offline
+Cadastro e edição
+Alteração opcional de senha
+Ativar, desativar e excluir
+Busca instantânea
+Layout mobile
+Popup de confirmação
+Principais arquivos:
+[condutores.php](/C:/xampp/htdocs/diversos_php/paginal html/menus/condutores.php)
+[lista.tpl](/C:/xampp/htdocs/diversos_php/paginal html/menus/template/condutores/lista.tpl)
+[formulario.tpl](/C:/xampp/htdocs/diversos_php/paginal html/menus/template/condutores/formulario.tpl)
+[condutores.js](/C:/xampp/htdocs/diversos_php/paginal html/menus/assets/js/pages/condutores.js)
+[acesso_condutores.class.php](/C:/xampp/htdocs/diversos_php/paginal html/menus/classes/acesso/acesso_condutores.class.php)
+CRUD validado com transação e rollback. Os 7 registros reais permaneceram intactos.
+
+
+
+-----------------------------
+
+
+Foram criados os módulos:
+Administradores — mod_administradores
+Empresas — mod_empresas
+Usuários das empresas — mod_empresa_admin
+Todos possuem:
+Listagem e busca
+Cadastro e edição
+Ativar e desativar
+Exclusão lógica
+Alteração opcional de senha
+Popups de confirmação
+Layout responsivo
+O cadastro de empresas também possui:
+Pessoa física e jurídica
+Endereço
+Contatos
+Redes sociais
+Validade do sistema
+O item “Clientes” continua no menu, mas oculto com display:none.
+Principais arquivos:
+[administradores.php](/C:/xampp/htdocs/diversos_php/paginal html/menus/administradores.php)
+[empresas.php](/C:/xampp/htdocs/diversos_php/paginal html/menus/empresas.php)
+[empresa_admin.php](/C:/xampp/htdocs/diversos_php/paginal html/menus/empresa_admin.php)
+Os três CRUDs foram testados com transações e rollback. Nenhum dado real foi alterado.
+
+-----------------------------
+
+
+Alterações no menu:
+Componentes → Dashboard
+Cadastros → Módulos
+Removidos Fornecedores e Usuários
+Adicionado Rastreamento
+Configurações agora possui:Administrativo
+Meus dados
+Logs de rastreamento
+
+Dashboard criada com métricas reais de:
+Condutores cadastrados
+Ativos e inativos
+Online e offline
+Cadastrados hoje, nesta semana e neste mês
+Empresas cadastradas e ativas
+Pontos GPS recebidos hoje
+Sugestões visuais para pedidos e futuras atualizações
+Logs de rastreamento incluem:
+Filtro por um único condutor
+Data e hora inicial/final
+Tabela com 5.000 pontos no máximo
+Mapa Leaflet com trajeto, início e fim
+Velocidade média
+Exportação PDF com Dompdf
+O PDF foi testado com 79 registros, gerou quatro páginas e foi inspecionado visualmente.
+Principais arquivos:
+[dashboard.tpl](/C:/xampp/htdocs/diversos_php/paginal html/menus/template/dashboard.tpl)
+[logs_rastreamento.php](/C:/xampp/htdocs/diversos_php/paginal html/menus/logs_rastreamento.php)
+[logs_rastreamento_pdf.php](/C:/xampp/htdocs/diversos_php/paginal html/menus/logs_rastreamento_pdf.php)
+[meus_dados.php](/C:/xampp/htdocs/diversos_php/paginal html/menus/meus_dados.php)
+
+
+-----------------------------
+
+
+Alterações:
+Pedidos e Financeiro exibem “Próxima versão” em vermelho.
+Administrativo → Usuários.
+Relatórios agora possui o submenu Condutores.
+Criada tela exclusiva de relatório sem a tabela de registros.
+Cálculo de:Distância percorrida
+Velocidade média
+Valor por quilômetro
+Valor total
+
+O botão “Exportar PDF” agora abre um popup com opções:
+Cabeçalho institucional
+Resumo dos cálculos
+Mapa do trajeto
+Detalhamento dos pontos
+O PDF inclui:
+Logo
+Dados de mod_sistema
+Nome do condutor
+Período pesquisado
+Cálculos
+Mapa completo do trajeto
+Início e fim destacados
+Principais arquivos:
+[relatorio_condutores.php](/C:/xampp/htdocs/diversos_php/paginal html/menus/relatorio_condutores.php)
+[relatorio_condutores_pdf.php](/C:/xampp/htdocs/diversos_php/paginal html/menus/relatorio_condutores_pdf.php)
+[condutores.tpl](/C:/xampp/htdocs/diversos_php/paginal html/menus/template/relatorios/condutores.tpl)
+O PDF foi gerado, renderizado e inspecionado visualmente.
+
+
+-----------------------------
+
+Rastreamento agora abre dentro do layout, mantendo o menu lateral.
+Criada página de login responsiva com logo e cores do sistema.
+Alteração de senha separada por AJAX em:Condutores
+Usuários das empresas
+Configurações → Usuários
+
+Telefone dos condutores formatado na listagem.
+Adicionado botão do WhatsApp nas ações.
+Na edição do condutor foram adicionados:Alterar senha
+Ativar/desativar
+Excluir
+
+Principais arquivos:
+[rastreamento.php](/C:/xampp/htdocs/diversos_php/paginal html/menus/rastreamento.php)
+[login.php](/C:/xampp/htdocs/diversos_php/paginal html/menus/login.php)
+[ajax_altera_senha.php](/C:/xampp/htdocs/diversos_php/paginal html/menus/ajax_altera_senha.php)
+As senhas foram testadas com transações e rollback; nenhum dado real foi modificado.
+
+
+-----------------------------
+manual
+
+-url amigável
+-sistema de login
+
+
+
+
+
+--------------------------------
+
+
+
+---------------------------------
+
+
+
+
+
+----------------------------------
+
+
+
+
+
+
+
+
+--------------------------------
+
+
+
+
+
+
+
+----------------------------------

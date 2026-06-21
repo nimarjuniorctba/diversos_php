@@ -1,0 +1,159 @@
+<?php
+/* Smarty version 4.1.0, created on 2026-03-30 23:12:32
+  from 'C:\xampp\htdocs\boxlav\sistema.boxlav.com.br\template\home\formulario.tpl' */
+
+/* @var Smarty_Internal_Template $_smarty_tpl */
+if ($_smarty_tpl->_decodeProperties($_smarty_tpl, array (
+  'version' => '4.1.0',
+  'unifunc' => 'content_69cb2d90772bd7_33790418',
+  'has_nocache_code' => false,
+  'file_dependency' => 
+  array (
+    '456d06f8b25d30f1dd5ed3e851a32ea678ee5d5e' => 
+    array (
+      0 => 'C:\\xampp\\htdocs\\boxlav\\sistema.boxlav.com.br\\template\\home\\formulario.tpl',
+      1 => 1774923048,
+      2 => 'file',
+    ),
+  ),
+  'includes' => 
+  array (
+    'file:topo.tpl' => 1,
+    'file:abas.tpl' => 1,
+    'file:rodape.tpl' => 1,
+  ),
+),false)) {
+function content_69cb2d90772bd7_33790418 (Smarty_Internal_Template $_smarty_tpl) {
+$_smarty_tpl->_subTemplateRender("file:topo.tpl", $_smarty_tpl->cache_id, $_smarty_tpl->compile_id, 0, $_smarty_tpl->cache_lifetime, array(), 0, false);
+?>
+
+<br>
+<div style="margin-left:32px;"><h6><?php echo $_smarty_tpl->tpl_vars['pagina']->value->titulo;?>
+</h6></div>
+<br>
+
+<?php $_smarty_tpl->_subTemplateRender("file:abas.tpl", $_smarty_tpl->cache_id, $_smarty_tpl->compile_id, 0, $_smarty_tpl->cache_lifetime, array(), 0, false);
+?>
+
+<table class="table border" style="width:94%;margin-top:-1;margin-left: 3%;">
+
+	<tr>
+		<td>	
+			<div>
+				<div class="alert alert-success" role="alert">Cadastro realizado com sucesso!</div>
+				<!--<div class="alert alert-danger" role="alert">Não foi possivel cadastrar, verifique os dados</div>-->
+				<?php echo (($tmp = $_smarty_tpl->tpl_vars['mensagem']->value ?? null)===null||$tmp==='' ? '' ?? null : $tmp);?>
+
+			</div>
+				<br>
+					<div class="table-responsive-sm">
+					
+
+<div class="header text-center">
+    <h2>Sistema de Teste</h2>
+</div>
+
+<div class="container mt-4">
+
+    <!-- Cards -->
+    <div class="row mb-4">
+        <div class="col-md-3">
+            <div class="card p-3">
+                <h5>Total Hoje</h5>
+                <h3>R$ 850,00</h3>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card p-3">
+                <h5>Serviços</h5>
+                <h3>24</h3>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card p-3">
+                <h5>Clientes</h5>
+                <h3>12</h3>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card p-3">
+                <h5>Funcionários</h5>
+                <h3>5</h3>
+            </div>
+        </div>
+    </div>
+
+    <!-- Tabela -->
+    <div class="card p-3">
+        <h5>Movimentações</h5>
+
+        <table id="tabela" class="display">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Cliente</th>
+                    <th>Serviço</th>
+                    <th>Valor</th>
+                    <th>Data</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>1</td>
+                    <td>João</td>
+                    <td>Lavagem Completa</td>
+                    <td>R$ 50,00</td>
+                    <td>27/03/2026</td>
+                </tr>
+                <tr>
+                    <td>2</td>
+                    <td>Maria</td>
+                    <td>Polimento</td>
+                    <td>R$ 120,00</td>
+                    <td>27/03/2026</td>
+                </tr>
+                <tr>
+                    <td>3</td>
+                    <td>Carlos</td>
+                    <td>Lavagem Simples</td>
+                    <td>R$ 30,00</td>
+                    <td>27/03/2026</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+</div>
+
+<!-- Scripts -->
+<?php echo '<script'; ?>
+ src="https://code.jquery.com/jquery-3.7.0.min.js"><?php echo '</script'; ?>
+>
+<?php echo '<script'; ?>
+ src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"><?php echo '</script'; ?>
+>
+
+<?php echo '<script'; ?>
+>
+    $(document).ready(function() {
+        $('#tabela').DataTable({
+            pageLength: 5,
+            language: {
+                url: "//cdn.datatables.net/plug-ins/1.13.6/i18n/pt-BR.json"
+            }
+        });
+    });
+<?php echo '</script'; ?>
+>
+					
+					
+					
+					</div>	
+	</td>
+    </tr>
+</table>
+
+
+<?php $_smarty_tpl->_subTemplateRender("file:rodape.tpl", $_smarty_tpl->cache_id, $_smarty_tpl->compile_id, 0, $_smarty_tpl->cache_lifetime, array(), 0, false);
+}
+}

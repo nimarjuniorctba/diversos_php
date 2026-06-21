@@ -1,0 +1,9 @@
+ACESSO NEGADO
+-----------------------------
+Data/Hora: 18/06/2026 05:20:43
+Email informado: levy@teste.com
+Senha informada: *****
+IP: ::1
+Navegador/App: Mozilla/5.0
+-----------------------------
+

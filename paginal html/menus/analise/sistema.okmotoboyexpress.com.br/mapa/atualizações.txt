@@ -1,0 +1,8 @@
+“Trajetos” renomeado para ETIQUETAS.
+Painéis ETIQUETAS e EMPRESAS agora podem ser minimizados.
+Indicadores inferiores podem descer, deixando apenas a seta para reabertura.
+Título e logo configuráveis no topo do [index.php](C:\\Users\\notebook\\OneDrive\\Documentos\\mapaMotoboys\\index.php):$tituloMenu = 'Ok MotoBoy Express';
+$logoMenu = 'imagem/logo.png';
+
+Adicionados comentários explicativos nas principais partes do PHP, CSS e JavaScript.
+Validações PHP, JavaScript e estrutura CSS passaram.

@@ -1,0 +1,69 @@
+<?php
+
+header('Content-Type: application/json');
+
+$con = new mysqli(
+    "localhost",
+    "root",
+    "",
+    "seu_banco"
+);
+
+if ($con->connect_error) {
+    die(json_encode([
+        'status' => false,
+        'msg' => 'Erro de conexão'
+    ]));
+}
+
+$id     = isset($_POST['id']) ? (int)$_POST['id'] : 0;
+$opcao  = isset($_POST['opcao']) ? trim($_POST['opcao']) : '';
+
+if ($id <= 0) {
+    echo json_encode([
+        'status' => false,
+        'msg' => 'ID inválido'
+    ]);
+    exit;
+}
+
+if ($opcao == 'ligar') {
+    $status = 'a';
+} else {
+    $status = 'i';
+}
+
+$sql = $con->prepare("
+    UPDATE mod_condutor
+    SET con_app_status = ?
+    WHERE con_id = ?
+");
+
+$sql->bind_param(
+    "si",
+    $status,
+    $id
+);
+
+if ($sql->execute()) {
+
+    echo json_encode([
+        'status' => true,
+        'msg' => 'Status atualizado',
+        'con_id' => $id,
+        'con_app_status' => $status
+    ]);
+
+} else {
+
+    echo json_encode([
+        'status' => false,
+        'msg' => 'Erro ao atualizar'
+    ]);
+
+}
+
+$sql->close();
+$con->close();
+
+?>

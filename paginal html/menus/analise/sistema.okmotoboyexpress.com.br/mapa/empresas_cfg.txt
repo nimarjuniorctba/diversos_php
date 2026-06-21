@@ -1,0 +1,47 @@
+código: 11083
+ramo: comida
+nome: Sushi Central
+Responsável: Marcelo
+Telefone: (41) 3045-2725 
+Whatsapp: 4130452725 
+endereço: R. Eduardo Carlos Pereira, 3605 - Portão, Curitiba - PR, 81020-235
+condutores: 5 
+plano: 2 - Mensalista
+
+---------------------
+
+código: 11085
+ramo: pizzaria 
+nome: Bacino Pizza Artesanal
+Responsável: Igor
+Telefone: (41) 3203-0125 
+Whatsapp: 4132030125 
+endereço: R. Martim Afonso, 2910 - Loja 02 - Bigorrilho, Curitiba - PR, 80730-030
+condutores: 3 
+plano: 2 - Mensalista
+
+---------------------
+
+código: 11075
+ramo: coleta de cupom 
+nome: Hospital de Clínicas da UFPR
+Responsável: Desconhecido
+Telefone: (41) 3360-1800 
+Whatsapp: 4133601800 
+endereço: Rua General Carneiro, 181 - Alto da Glória, Curitiba - PR
+condutores: 3 
+plano: 2 - Mensalista
+
+---------------------
+
+código: 11043
+ramo: hotel
+nome: Hotel Campo Largo
+Responsável: Marcelo
+Telefone: (41) 3360-1800 
+Whatsapp: 4133601800 
+endereço: Avenida Vereador Arlindo Chemin, 611 - Centro, Campo Largo 83601070
+condutores: 10 
+plano: 2 - Mensalista
+
+---------------------

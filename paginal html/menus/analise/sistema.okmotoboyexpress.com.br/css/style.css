@@ -1,0 +1,309 @@
+
+@font-face {
+    font-family: DS-Digital;
+    src: url(../fonts/DS-DIGIT.ttf)
+}
+
+*{
+    margin: 0;
+    padding: 0;
+}
+body{
+	background-color : #a0afc1;
+}
+input[type="text"]{
+	-webkit-box-shadow: inset 0 1px 3px rgba(0,0,0,0.50);
+	background: #e2e2e2;
+}
+
+input[type="text"].errado{
+	border: 1px solid #F44336!important;
+    background-color: #ddb5b5!important;	
+	color: F44336!important;
+}
+
+input[type="text"].certo{
+	border: 1px solid #4CAF50!important;
+    background-color: #e5f7e6!important;	
+	color: green!important;
+}
+
+select{
+	-webkit-box-shadow: inset 0 1px 3px rgba(0,0,0,0.50);
+	background: #e2e2e2!important;
+}
+
+textarea{
+	-webkit-box-shadow: inset 0 1px 3px rgba(0,0,0,0.50);
+	background: #e2e2e2;
+}
+.formulario label{
+	margin-bottom: 0px;
+    float: left;
+    width: 100%;
+    font-family: 'Open Sans', sans-serif;
+    line-height: 15px;
+    font-size: 14px;
+    color: #666;
+    margin: 5px 0 0 0;	
+}
+.formulario div{
+	margin-top: 5px;
+}
+
+.formulario hr{
+	border-top: 1px solid #f57a1a;
+}
+.formulario button{
+	color: white;
+}
+
+a{
+	text-decoration : none;
+	color: white;
+}
+a:hover{
+	text-decoration : none;
+	color: white;
+}
+.formulario .form-control{
+	width: 99%;	
+}
+
+h5{
+	color: #2d4a69;	
+}
+
+
+h4{
+    float: left;
+    width: 97%;
+    color: rgb(16, 99, 163);
+    text-transform: uppercase;
+    margin-bottom: 10px;
+    font: bold 25px / 35px "Open Sans", sans-serif;
+    border-bottom: 1px solid rgb(255, 102, 0);
+}	
+
+/* tabela PLANOS */
+.planos { float: left; position: relative; left: 50%; width: 90%!important; margin-left: -45%; margin-bottom: 30px!important; }
+.planos li { float: left; width: 20%; }
+.planos li span { float: left; width: 100%; height: 45px; line-height: 45px; text-align: center;  background-color:#e3e3e3; color: #333; font-size:15px;  }
+.planos .resp { display: none; }
+.planos li .linha-1 { float: left; width: 100%; height: 80px!important; font-size:18px; font-weight:700; text-align: center; color: #fff;  }
+.planos li span input[type="radio"]  {  left: 50%; width: 20px; height: 20px; border: none; background: none; box-shadow: none; -moz-box-shadow: none; -webkit-box-shadow: none; margin: 10px 0 0 -10px; }
+.planos li span small  { float: left; width: 100%; text-align: center; line-height: 20px; padding-bottom: 10px; color:#FFF; font-size: 20px; text-align: center; font-weight: 700;}
+.planos li .linha-2 { float: left; width: 100%; height: 140px; color: #fff; font-size:36px; font-weight:700; }
+.planos li .linha-2 .cima { float: left; width: 100%; height: 60px; color: #fff; font-size:25px; color:#FC0; text-decoration:line-through; line-height: 90px; font-weight:400; text-align:center; }
+.planos li .linha-2 .baixo { float: left; width: 100%; height: 80px; color: #fff; font-size:28px; color: #fff; line-height: 50px; font-weight:700; text-align:center; }
+.tabela-resumo {margin-left:20.5%; width:53%; padding:3% 1%;}
+.cor-letra {color:#1063A3; font-weight:bold; text-transform:uppercase; border:none; padding-right:10px; font-size:14px;}
+
+/* tabela PLANOS */
+.plano-contratado { float: left; position: relative; left: 50%; width: 95%!important; margin-left: -48%; margin-bottom: 30px!important; }
+.plano-contratado h2 { float: left; width: 100%; text-align:center; font-family: 'Open Sans', sans-serif; font-weight: 600; line-height: 45px; font-size: 30px; height: 45px; background:#999; color: #fff; margin: 20px 0 0 0; }
+.plano-contratado li { float: left; width: 50%; }
+.plano-contratado li span { float: left; width: 100%; height: 45px; line-height: 45px; text-align: center;  background-color:#ebebeb; color: #666; font-size:15px;  }
+
+.pedido-realizado { padding: 20px;}
+.pedido-realizado h2 { height: auto; line-height: auto!important; margin-bottom: 30px;}
+.pedido-realizado .impressora { width: 100%; margin-top: 20px;}
+.pedido-realizado .impressora img { position: relative; left: 50%; margin-left: -16px;}
+.pedido-realizado .impressora a { position: relative; width: 150px; left: 50%; margin-left: -60px;}
+
+
+.cor-produto-sistema-1 {
+    background-color: #374c9a;
+    padding: 10px;
+    color: white!important;
+	font-size: 17px!important;
+    height: 36px!important;
+    margin: 0;	
+}
+
+.cor-produto-website-1{
+    background-color: #464D54;
+    padding: 10px;
+    color: white!important;
+	font-size: 17px!important;
+    height: 36px!important;
+    margin: 0;	
+}
+
+
+.cor-produto-aplicativo-1{
+    background-color: #294c30;
+    padding: 10px;
+    color: white!important;
+	font-size: 17px!important;
+    height: 36px!important;
+    margin: 0;	
+}
+
+.cor-produto-ecommerce-1{
+    background-color: #1c6f80;
+    padding: 10px;
+    color: white!important;
+	font-size: 17px!important;
+    height: 36px!important;
+    margin: 0;	
+}
+
+.cor-produto-combos-1{
+    background-color: #e28700;
+    padding: 10px;
+    color: white!important;
+	font-size: 17px!important;
+    height: 36px!important;
+    margin: 0;	
+}
+	
+/* Cabeçalho*/	
+nav li{
+	cursor: pointer;
+}
+.nav-tabs {
+
+	background-image: linear-gradient(180deg, #fe9d32, #eb5400);
+    border-radius: 5px 5px 0 0;		
+}	
+.table{box-shadow: 3px 3px 9px 0px rgb(0 0 0 / 50%);}
+.principal{background-color:white;}
+.btn{box-shadow: 3px 3px 9px 0px rgb(0 0 0 / 50%);}
+
+.barra-titulo{
+	background: darkgrey!important;
+	color: white;	
+}
+
+.topo {
+  height: 200px;
+  background-color: white; /* For browsers that do not support gradients */
+  background-image: linear-gradient(white, lightgrey)
+}
+.icones-cadastro{	
+	height: 40px;
+	width: 40px;
+	margin-left: 29%;	
+}
+.btn-cadastro{	
+	border-top:none!important;
+	cursor: pointer;	
+}
+.titulo-aba{
+	color: white;
+    font-weight: 600;
+    font-size: 15 px;
+    margin-top: 10px;		
+	flex-grow: 1;
+    text-align: left;
+    margin-left: 1%;	
+	text-transform: uppercase;
+	text-shadow: 1px 1px 0 rgba(0,0,0,0.5);	
+}
+.nav-tabs .nav-link{
+	color: white;
+    background-color: #2d4a69;
+    border-color: #2d4a69 #2d4a69 #fff;
+}
+.nav-tabs .nav-link.active{
+	font-weight: 600;
+}	
+.navbar-light .navbar-nav .nav-link {
+    color: white;
+}
+.navbar-light .navbar-brand {
+    color: white;
+}
+.navbar {
+   background-color: #2d4a69!important;
+    color: white!important;
+}
+.navbar-light .navbar-nav .nav-link:focus, .navbar-light .navbar-nav .nav-link:hover {
+    color: white;
+}
+.nav-item.dropdown:hover{
+background-color: #57697c;
+}
+.container {
+	width: 100vw;
+	height: 100vh;
+	display: flex;
+	flex-direction: row;
+	justify-content: center;
+	align-items: center;
+}
+.box {
+	width: 340px;
+	height: 75%;
+	background: #fff;
+}
+.menu{
+    width: 100vw;
+    background-color:#2d4a69;
+    display:    flex;
+    flex-direction: row;      
+}
+.menu ul{
+    list-style: none;
+    /*margin-top: 2%;*/
+    cursor: pointer;
+}
+.menu ul li{
+    background-color:#2d4a69;
+    color:hsl(0, 0%, 100%);
+    width:105px;
+    height: 50px;
+    line-height: 50px;
+    float: left;
+    font-size:15;
+    position:relative;
+    padding: 5px;
+    font-family: -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif,"Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol","Noto Color Emoji";    
+}
+
+.menu ul li li:hover{
+    background: #447cb8;
+}
+.menu ul li li{
+    width:150px;
+}
+.menu ul ul{
+    display:none;
+    margin:0px;
+}
+.menu ul li:hover>ul{
+    display:block;
+}
+.menu ul ul ul{
+    margin-left:  145px;
+    top: 0px;
+    position: absolute;
+}
+.img-topofix{
+         float: left;
+         width: 222px;
+         margin: -92px 20px 6px 25px;
+         font-size: 0px;
+         position: absolute; 
+         z-index: 1010;	
+}
+
+.containerClock {    
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  .clock {
+    align-items: center; 
+    background-color:#E0E0E0;
+    border-radius: 5px;
+    color: #000;
+    display: flex;
+    font-size: 31px;
+    justify-content: center;
+    height: 35px;
+    width: 115px;
+    -webkit-box-shadow: inset 0 1px 3px rgba(0,0,0,0.50);
+    font-family: 'DS-Digital';
+  }

@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Menu Responsivo Completo</title>
+
+<style>
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: Arial, sans-serif;
+}
+
+body {
+    background: #f5f5f5;
+}
+
+/* NAVBAR */
+.navbar {
+    background: #1e1e2f;
+    color: #fff;
+}
+
+.nav-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    height: 60px;
+    padding: 0 20px;
+}
+
+.logo {
+    font-size: 20px;
+    font-weight: bold;
+}
+
+/* MENU */
+.menu {
+    list-style: none;
+    display: flex;
+}
+
+.menu li {
+    position: relative;
+}
+
+/* LINKS */
+.menu li a,
+.menu li label {
+    display: block;
+    padding: 20px;
+    color: #fff;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+.menu li a:hover,
+.menu li label:hover {
+    background: #33334d;
+}
+
+/* SUBMENU */
+.submenu {
+    display: none;
+    position: absolute;
+    top: 60px;
+    left: 0;
+    background: #2c2c44;
+    min-width: 180px;
+    flex-direction: column;
+}
+
+.submenu li a {
+    padding: 12px;
+}
+
+/* DESKTOP HOVER */
+.menu li:hover > .submenu {
+    display: flex;
+}
+
+/* BOTÃO MOBILE */
+.menu-toggle {
+    display: none;
+    font-size: 28px;
+    cursor: pointer;
+}
+
+/* RESPONSIVO */
+@media (max-width: 768px) {
+
+    .menu {
+        position: absolute;
+        top: 60px;
+        left: 0;
+        width: 100%;
+        background: #1e1e2f;
+        flex-direction: column;
+        display: none;
+    }
+
+    .menu li {
+        width: 100%;
+    }
+
+    .menu li a,
+    .menu li label {
+        padding: 15px;
+        border-top: 1px solid #333;
+    }
+
+    .submenu {
+        position: static;
+    }
+
+    /* desativa hover no mobile */
+    .menu li:hover > .submenu {
+        display: none;
+    }
+
+    /* ativa clique via checkbox */
+    .menu li input:checked ~ .submenu {
+        display: flex;
+    }
+
+    .menu-toggle {
+        display: block;
+    }
+
+    #menu-check:checked ~ .menu {
+        display: flex;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<nav class="navbar">
+    <div class="nav-container">
+        <div class="logo">MeuSistema</div>
+
+        <!-- BOTÃO MOBILE -->
+        <label for="menu-check" class="menu-toggle">☰</label>
+        <input type="checkbox" id="menu-check" hidden>
+
+        <!-- MENU -->
+        <ul class="menu">
+
+            <li><a href="#">Dashboard</a></li>
+
+            <li>
+                <label for="sub1">Clientes ▾</label>
+                <input type="checkbox" id="sub1" hidden>
+
+                <ul class="submenu">
+                    <li><a href="#">Cadastrar</a></li>
+                    <li><a href="#">Listar</a></li>
+                </ul>
+            </li>
+
+            <li>
+                <label for="sub2">Serviços ▾</label>
+                <input type="checkbox" id="sub2" hidden>
+
+                <ul class="submenu">
+                    <li><a href="#">Novo Serviço</a></li>
+                    <li><a href="#">Categorias</a></li>
+                </ul>
+            </li>
+
+            <li>
+                <label for="sub3">Financeiro ▾</label>
+                <input type="checkbox" id="sub3" hidden>
+
+                <ul class="submenu">
+                    <li><a href="#">Entradas</a></li>
+                    <li><a href="#">Saídas</a></li>
+                    <li><a href="#">Relatórios</a></li>
+                </ul>
+            </li>
+
+            <li><a href="#">Configurações</a></li>
+
+        </ul>
+    </div>
+</nav>
+
+</body>
+</html>
