@@ -1,0 +1,272 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+  <meta name="theme-color" content="#07111f">
+  <title>R1 e Boxinho — Mascotes interativos</title>
+  <style>
+    :root { --blue:#4d8dff; --cyan:#58f1df; --ink:#07111f; --panel:#101e31; }
+    * { box-sizing:border-box; -webkit-tap-highlight-color:transparent; }
+    body { margin:0; min-height:145vh; overflow-x:hidden; color:#eaf2ff; font-family:system-ui,-apple-system,"Segoe UI",sans-serif; background:radial-gradient(circle at 85% 5%,#17375b 0,transparent 32%),linear-gradient(160deg,#07111f,#0b1728 52%,#10233c); }
+    body::before { content:""; position:fixed; inset:0; pointer-events:none; opacity:.22; background-image:linear-gradient(rgba(88,241,223,.08) 1px,transparent 1px),linear-gradient(90deg,rgba(88,241,223,.08) 1px,transparent 1px); background-size:32px 32px; mask-image:linear-gradient(to bottom,#000,transparent 75%); }
+    main { position:relative; width:min(720px,100%); padding:38px 20px 250px; }
+    .topbar { position:sticky; top:10px; z-index:30; display:flex; gap:8px; width:min(680px,calc(100% - 24px)); margin:10px 12px 0; padding:6px; border:1px solid rgba(150,188,228,.18); border-radius:16px; background:rgba(7,17,31,.82); box-shadow:0 15px 40px rgba(0,0,0,.2); backdrop-filter:blur(14px); }
+    .tab,.hide-bot { min-height:40px; padding:0 13px; color:#aabbd2; border:0; border-radius:11px; background:transparent; font:700 12px system-ui; cursor:pointer; }
+    .tab.active { color:#07111f; background:var(--cyan); }
+    .hide-bot { margin-left:auto; color:#dce9fb; background:#152941; }
+    .page[hidden] { display:none; }
+    .eyebrow { color:var(--cyan); font-size:12px; font-weight:800; letter-spacing:.18em; text-transform:uppercase; }
+    h1 { max-width:580px; margin:9px 0 12px; font-size:clamp(32px,9vw,60px); line-height:.98; letter-spacing:-.045em; }
+    .lead { max-width:560px; margin:0; color:#aabbd2; line-height:1.65; }
+    .panel { margin-top:26px; padding:18px; border:1px solid rgba(150,188,228,.18); border-radius:22px; background:rgba(14,30,50,.72); box-shadow:0 24px 70px rgba(0,0,0,.25); backdrop-filter:blur(12px); }
+    .panel-head { display:flex; justify-content:space-between; gap:14px; align-items:center; margin-bottom:14px; }
+    .panel-head strong { font-size:15px; }
+    #status { color:var(--cyan); font-size:12px; font-weight:800; }
+    .controls { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:9px; }
+    .controls button,.bubble button { border:0; font:inherit; cursor:pointer; }
+    .controls button { min-height:46px; padding:9px 10px; color:#dce9fb; border:1px solid rgba(144,183,224,.15); border-radius:13px; background:#152941; font-size:13px; font-weight:700; transition:.18s ease; }
+    .controls button:active,.controls button.active { color:#07111f; background:var(--cyan); transform:scale(.97); }
+    .tip { margin:14px 2px 0; color:#8295ae; font-size:12px; line-height:1.5; }
+    .feature-list { display:grid; gap:9px; margin:22px 0 0; padding:0; list-style:none; }
+    .feature-list li { padding:13px 14px; color:#c8d7ea; border:1px solid rgba(144,183,224,.13); border-radius:13px; background:rgba(21,41,65,.65); }
+    .scenario-table { width:100%; margin-top:16px; border-collapse:separate; border-spacing:0 7px; font-size:13px; }
+    .scenario-table td { padding:11px 12px; color:#b9c9dc; background:#152941; }
+    .scenario-table td:first-child { color:#fff; border-radius:11px 0 0 11px; font-weight:750; }
+    .scenario-table td:last-child { border-radius:0 11px 11px 0; }
+    #show-bot { position:fixed; right:14px; bottom:14px; z-index:31; display:none; min-height:42px; padding:0 14px; color:#07111f; border:0; border-radius:99px; background:var(--cyan); font:800 12px system-ui; box-shadow:0 12px 35px rgba(88,241,223,.3); }
+    #pet-wrap { position:fixed; right:max(2px,env(safe-area-inset-right)); bottom:max(0px,env(safe-area-inset-bottom)); z-index:20; width:190px; height:205px; touch-action:manipulation; filter:drop-shadow(0 18px 14px rgba(0,0,0,.34)); user-select:none; }
+    canvas { display:block; width:100%; height:100%; }
+    #fx { position:fixed; inset:0; z-index:18; width:100vw; height:100vh; pointer-events:none; }
+    .badge { position:fixed; right:18px; bottom:192px; z-index:19; padding:7px 11px; color:#07111f; border-radius:99px; background:var(--cyan); font-size:11px; font-weight:900; box-shadow:0 8px 25px rgba(88,241,223,.25); animation:pulse 1.8s infinite; pointer-events:none; transition:.25s; }
+    .bubble { position:fixed; right:20px; bottom:198px; z-index:25; width:min(290px,calc(100vw - 30px)); padding:17px; color:#152238; border:1px solid #dbe8f6; border-radius:20px 20px 4px 20px; background:#fff; box-shadow:0 22px 65px rgba(0,0,0,.32); opacity:0; visibility:hidden; transform:translateY(12px) scale(.94); transform-origin:bottom right; transition:.22s ease; }
+    .bubble.open { opacity:1; visibility:visible; transform:none; }
+    .bubble strong { display:block; margin-bottom:5px; font-size:16px; }
+    .bubble p { min-height:40px; margin:0 0 13px; color:#536078; font-size:14px; line-height:1.42; }
+    .bubble-actions { display:flex; gap:8px; }
+    .bubble button { min-height:38px; padding:0 13px; border-radius:10px; font-size:12px; font-weight:800; }
+    .primary { color:#fff; background:#356df3; } .secondary { color:#46536b; background:#edf2f8; }
+    @keyframes pulse { 50% { transform:translateY(-4px); box-shadow:0 11px 32px rgba(88,241,223,.5); } }
+    @media (min-width:560px) { .controls { grid-template-columns:repeat(4,1fr); } }
+    @media (prefers-reduced-motion:reduce) { *,*::before,*::after { animation:none!important; transition:none!important; } }
+  </style>
+</head>
+<body>
+  <nav class="topbar" aria-label="Demonstrações">
+    <button class="tab active" data-page="robot-page">🤖 Robô R1</button>
+    <button class="tab" data-page="boxlav-page">🚙 Mascote BoxLav</button>
+    <button class="hide-bot" id="hide-bot">Ocultar bot</button>
+  </nav>
+  <main>
+   <section class="page" id="robot-page">
+    <div class="eyebrow">Canvas Animation Lab</div>
+    <h1>Conheça o R1, seu assistente digital.</h1>
+    <p class="lead">Toque nele para conversar ou teste os estados abaixo. Ele observa seu toque, reage, muda de expressão e faz pequenas animações sozinho.</p>
+    <section class="panel">
+      <div class="panel-head"><strong>Central de movimentos</strong><span id="status">OCIOSO</span></div>
+      <div class="controls" id="controls">
+        <button data-mode="wave">👋 Acenar</button><button data-mode="dance">🎵 Dançar</button>
+        <button data-mode="fly">🚀 Voar</button><button data-mode="think">💡 Pensar</button>
+        <button data-mode="sleep">💤 Dormir</button><button data-mode="surprise">⚡ Susto</button>
+        <button data-mode="celebrate">🎉 Comemorar</button><button data-mode="scan">🔎 Escanear</button>
+        <button data-mode="missile">🚀 Míssil de confete</button>
+        <button data-mode="swarm">🎯 Enxame perseguidor</button>
+      </div>
+      <p class="tip">Dica: mova o dedo pela tela e veja os olhos acompanharem. Toque duas vezes no robô para uma animação surpresa.</p>
+    </section>
+   </section>
+
+   <section class="page" id="boxlav-page" hidden>
+    <div class="eyebrow">BoxLav Mascot Lab</div>
+    <h1>Boxinho, o carrinho que cuida da agenda.</h1>
+    <p class="lead">Um carro compacto, arredondado e expressivo, com braços pequenos, detalhes azuis e espuma branca. Ele liga cada animação a um acontecimento real do BoxLav.</p>
+    <ul class="feature-list">
+      <li>🧽 Pode chegar sujo e ficar completamente limpo.</li>
+      <li>🫧 Solta espuma e bolhas durante a lavagem.</li>
+      <li>💦 Usa mangueira e lavadora de alta pressão.</li>
+      <li>💡 Pisca os faróis como se fossem olhos.</li>
+      <li>📅 Avisa visualmente sobre novos agendamentos.</li>
+      <li>✨ Comemora quando um serviço é concluído.</li>
+    </ul>
+    <section class="panel">
+      <div class="panel-head"><strong>Simular evento do BoxLav</strong><span id="car-status">PRONTO</span></div>
+      <div class="controls" id="car-controls">
+        <button data-car-mode="dirty">🟤 Chegar sujo</button><button data-car-mode="wash">🫧 Lavar agora</button>
+        <button data-car-mode="schedule">📅 Novo agendamento</button><button data-car-mode="arrived">👋 Cliente chegou</button>
+        <button data-car-mode="started">💦 Serviço iniciado</button><button data-car-mode="complete">✨ Serviço concluído</button>
+        <button data-car-mode="conflict">⚠️ Conflito</button><button data-car-mode="empty">💤 Agenda vazia</button>
+        <button data-car-mode="payment">💰 Pagamento</button><button data-car-mode="notice">📢 Notificação</button>
+      </div>
+    </section>
+    <section class="panel">
+      <div class="panel-head"><strong>Situação no BoxLav</strong><span>ANIMAÇÃO</span></div>
+      <table class="scenario-table">
+        <tbody>
+          <tr><td>Novo agendamento</td><td>Faróis piscam e aparece uma agenda</td></tr>
+          <tr><td>Cliente chegou</td><td>Carrinho buzina e acena</td></tr>
+          <tr><td>Serviço iniciado</td><td>Espuma aparece sobre ele</td></tr>
+          <tr><td>Serviço concluído</td><td>Fica brilhando e solta confetes</td></tr>
+          <tr><td>Horário em conflito</td><td>Fica vermelho e mostra alerta</td></tr>
+          <tr><td>Agenda vazia</td><td>Dorme encostado em uma placa</td></tr>
+          <tr><td>Pagamento recebido</td><td>Mostra moeda ou comprovante</td></tr>
+          <tr><td>Notificação importante</td><td>Balança uma placa</td></tr>
+          <tr><td>Clique do usuário</td><td>Pergunta “Precisa de ajuda?”</td></tr>
+        </tbody>
+      </table>
+    </section>
+   </section>
+  </main>
+
+  <canvas id="fx" aria-hidden="true"></canvas>
+  <div class="badge" id="badge">TOQUE EM MIM</div>
+  <aside class="bubble" id="bubble" aria-live="polite" aria-hidden="true">
+    <strong id="bubble-title">Olá, eu sou o R1! 🤖</strong>
+    <p id="bubble-text">Precisa de ajuda?</p>
+    <div class="bubble-actions"><button class="primary" id="yes">Sim, preciso</button><button class="secondary" id="no">Agora não</button></div>
+  </aside>
+  <div id="pet-wrap" role="button" tabindex="0" aria-label="Robô R1. Toque para conversar."><canvas id="pet"></canvas></div>
+  <button id="show-bot">Mostrar mascote</button>
+
+  <script>
+    (() => {
+      const canvas=document.querySelector('#pet'), ctx=canvas.getContext('2d');
+      const fx=document.querySelector('#fx'), fctx=fx.getContext('2d');
+      const wrap=document.querySelector('#pet-wrap'), bubble=document.querySelector('#bubble');
+      const badge=document.querySelector('#badge'), status=document.querySelector('#status');
+      const title=document.querySelector('#bubble-title'), text=document.querySelector('#bubble-text');
+      const reduced=matchMedia('(prefers-reduced-motion:reduce)').matches;
+      const W=190,H=205, particles=[], fxParticles=[], swarm=[];
+      let mode='idle', modeUntil=0, last=0, raf=0, pointer={x:95,y:65}, lastTap=0, idleTimer=0;
+      let missile=null, flash=null, fxDpr=1, swarmRemaining=0, swarmNext=0, fxPointer={x:innerWidth*.45,y:innerHeight*.35};
+      let character='robot', carMode='idle', carModeUntil=0, carDirty=false, carWashStart=0, botVisible=true;
+
+      function resize(){const d=Math.min(devicePixelRatio||1,2);canvas.width=W*d;canvas.height=H*d;ctx.setTransform(d,0,0,d,0,0);fxDpr=d;fx.width=Math.round(innerWidth*d);fx.height=Math.round(innerHeight*d);fctx.setTransform(d,0,0,d,0,0)}
+      function ellipse(x,y,rx,ry,color){ctx.beginPath();ctx.ellipse(x,y,rx,ry,0,0,Math.PI*2);ctx.fillStyle=color;ctx.fill()}
+      function roundRect(x,y,w,h,r,color,stroke){ctx.beginPath();ctx.roundRect(x,y,w,h,r);ctx.fillStyle=color;ctx.fill();if(stroke){ctx.strokeStyle=stroke;ctx.lineWidth=2;ctx.stroke()}}
+      function line(x1,y1,x2,y2,color,width=5){ctx.beginPath();ctx.moveTo(x1,y1);ctx.lineTo(x2,y2);ctx.strokeStyle=color;ctx.lineWidth=width;ctx.lineCap='round';ctx.stroke()}
+      function setMode(next,duration=2600){mode=next;modeUntil=performance.now()+duration;status.textContent=next.toUpperCase();document.querySelectorAll('[data-mode]').forEach(b=>b.classList.toggle('active',b.dataset.mode===next));if(next==='celebrate')burst(38);if(next==='surprise')burst(12,'#ffcf5a');if(next==='missile')launchMissile();if(next==='swarm')launchSwarm()}
+      function burst(count,color){for(let i=0;i<count;i++)particles.push({x:95,y:82,vx:(Math.random()-.5)*5.5,vy:-2-Math.random()*5,life:45+Math.random()*35,color:color||['#58f1df','#4d8dff','#ff5e8a','#ffcf5a'][i%4],size:2+Math.random()*4,rot:Math.random()*6})}
+      function drawParticles(){for(let i=particles.length-1;i>=0;i--){const p=particles[i];p.x+=p.vx;p.y+=p.vy;p.vy+=.12;p.rot+=.15;p.life--;ctx.save();ctx.translate(p.x,p.y);ctx.rotate(p.rot);ctx.fillStyle=p.color;ctx.fillRect(-p.size/2,-p.size/2,p.size,p.size*1.8);ctx.restore();if(p.life<=0)particles.splice(i,1)}}
+
+      function launchMissile(){
+        const r=wrap.getBoundingClientRect(), sx=r.left+42, sy=r.top+105;
+        missile={start:performance.now()+500,sx,sy,cx:innerWidth*.54,cy:Math.max(40,innerHeight*.06),ex:Math.max(70,innerWidth*.18),ey:Math.max(120,innerHeight*.32),trail:[]};
+      }
+      function launchSwarm(){swarm.length=0;swarmRemaining=18;swarmNext=performance.now()+350;fxPointer={x:innerWidth*.35,y:innerHeight*.3};bubble.classList.remove('open')}
+      function spawnHoming(){const r=wrap.getBoundingClientRect(),x=r.left+35+Math.random()*22,y=r.top+95+Math.random()*30,a=Math.PI+(Math.random()-.5)*.7;swarm.push({x,y,vx:Math.cos(a)*3,vy:Math.sin(a)*3,born:performance.now(),life:0,trail:[],color:['#58f1df','#4d8dff','#ffcf5a','#ff5e8a'][swarmRemaining%4]})}
+      function explodeFX(x,y,t,count=110,vibrate=true){
+        flash={x,y,start:t};const colors=['#58f1df','#4d8dff','#ff5e8a','#ffcf5a','#a875ff','#fff'];
+        for(let i=0;i<count;i++){const a=Math.random()*Math.PI*2,s=1.5+Math.random()*7;fxParticles.push({x,y,vx:Math.cos(a)*s,vy:Math.sin(a)*s-2,life:60+Math.random()*70,max:130,size:3+Math.random()*6,color:colors[i%colors.length],rot:Math.random()*6,spin:(Math.random()-.5)*.35,shape:i%5===0?'circle':'rect'})}
+        if(vibrate&&navigator.vibrate)navigator.vibrate([35,30,60]);
+      }
+      function drawFX(t){
+        fctx.clearRect(0,0,innerWidth,innerHeight);
+        if(missile&&t>=missile.start){const p=Math.min(1,(t-missile.start)/1750),q=1-p;const x=q*q*missile.sx+2*q*p*missile.cx+p*p*missile.ex,y=q*q*missile.sy+2*q*p*missile.cy+p*p*missile.ey;const dx=2*q*(missile.cx-missile.sx)+2*p*(missile.ex-missile.cx),dy=2*q*(missile.cy-missile.sy)+2*p*(missile.ey-missile.cy);missile.trail.push({x,y,life:1});if(missile.trail.length>28)missile.trail.shift();
+          for(let i=0;i<missile.trail.length;i++){const a=i/missile.trail.length,pt=missile.trail[i];fctx.globalAlpha=a*.8;fctx.fillStyle=i%2?'#ffcf5a':'#ff704d';fctx.beginPath();fctx.arc(pt.x,pt.y,2+a*7,0,Math.PI*2);fctx.fill()}fctx.globalAlpha=1;
+          fctx.save();fctx.translate(x,y);fctx.rotate(Math.atan2(dy,dx));fctx.fillStyle='#e8f1fa';fctx.beginPath();fctx.moveTo(18,0);fctx.lineTo(-10,-7);fctx.lineTo(-5,0);fctx.lineTo(-10,7);fctx.closePath();fctx.fill();fctx.fillStyle='#4d8dff';fctx.fillRect(-8,-5,12,10);fctx.fillStyle='#ff5e8a';fctx.beginPath();fctx.moveTo(-8,-7);fctx.lineTo(-15,-12);fctx.lineTo(-13,-2);fctx.closePath();fctx.fill();fctx.restore();
+          if(p>=1){explodeFX(x,y,t);missile=null}
+        }
+        if(mode==='swarm'&&swarmRemaining>0&&t>=swarmNext){spawnHoming();swarmRemaining--;swarmNext=t+120}
+        if(mode==='swarm'||swarm.length){fctx.save();fctx.strokeStyle='rgba(88,241,223,.7)';fctx.lineWidth=2;fctx.beginPath();fctx.arc(fxPointer.x,fxPointer.y,15+Math.sin(t/100)*3,0,Math.PI*2);fctx.moveTo(fxPointer.x-24,fxPointer.y);fctx.lineTo(fxPointer.x-8,fxPointer.y);fctx.moveTo(fxPointer.x+8,fxPointer.y);fctx.lineTo(fxPointer.x+24,fxPointer.y);fctx.moveTo(fxPointer.x,fxPointer.y-24);fctx.lineTo(fxPointer.x,fxPointer.y-8);fctx.moveTo(fxPointer.x,fxPointer.y+8);fctx.lineTo(fxPointer.x,fxPointer.y+24);fctx.stroke();fctx.restore()}
+        for(let i=swarm.length-1;i>=0;i--){const m=swarm[i],dx=fxPointer.x-m.x,dy=fxPointer.y-m.y,dist=Math.hypot(dx,dy)||1;let desiredX=dx/dist*6,desiredY=dy/dist*6;m.vx+=(desiredX-m.vx)*.085;m.vy+=(desiredY-m.vy)*.085;const speed=Math.hypot(m.vx,m.vy);if(speed>7){m.vx=m.vx/speed*7;m.vy=m.vy/speed*7}m.x+=m.vx;m.y+=m.vy;m.life++;m.trail.push({x:m.x,y:m.y});if(m.trail.length>13)m.trail.shift();for(let j=0;j<m.trail.length;j++){const a=j/m.trail.length;fctx.globalAlpha=a*.55;fctx.fillStyle=m.color;fctx.beginPath();fctx.arc(m.trail[j].x,m.trail[j].y,1+a*3,0,Math.PI*2);fctx.fill()}fctx.globalAlpha=1;fctx.save();fctx.translate(m.x,m.y);fctx.rotate(Math.atan2(m.vy,m.vx));fctx.fillStyle='#f5f8fc';fctx.beginPath();fctx.moveTo(11,0);fctx.lineTo(-7,-4);fctx.lineTo(-4,0);fctx.lineTo(-7,4);fctx.closePath();fctx.fill();fctx.fillStyle=m.color;fctx.fillRect(-5,-3,7,6);fctx.restore();if((dist<20&&m.life>8)||m.life>260){explodeFX(m.x,m.y,t,18,false);swarm.splice(i,1)}}
+        if(flash){const age=t-flash.start;if(age<700){const radius=15+age*.22;const g=fctx.createRadialGradient(flash.x,flash.y,0,flash.x,flash.y,radius);g.addColorStop(0,`rgba(255,255,255,${Math.max(0,1-age/500)})`);g.addColorStop(.25,`rgba(255,207,90,${Math.max(0,.9-age/650)})`);g.addColorStop(1,'rgba(255,94,138,0)');fctx.fillStyle=g;fctx.beginPath();fctx.arc(flash.x,flash.y,radius,0,Math.PI*2);fctx.fill()}else flash=null}
+        for(let i=fxParticles.length-1;i>=0;i--){const p=fxParticles[i];p.x+=p.vx;p.y+=p.vy;p.vy+=.11;p.vx*=.995;p.rot+=p.spin;p.life--;fctx.save();fctx.globalAlpha=Math.min(1,p.life/25);fctx.translate(p.x,p.y);fctx.rotate(p.rot);fctx.fillStyle=p.color;if(p.shape==='circle'){fctx.beginPath();fctx.arc(0,0,p.size/2,0,Math.PI*2);fctx.fill()}else fctx.fillRect(-p.size/2,-p.size/2,p.size,p.size*1.8);fctx.restore();if(p.life<=0||p.y>innerHeight+30)fxParticles.splice(i,1)}fctx.globalAlpha=1;
+      }
+
+      function drawRobot(t){
+        ctx.clearRect(0,0,W,H);if(mode!=='idle'&&t>modeUntil){mode='idle';status.textContent='OCIOSO';document.querySelectorAll('[data-mode]').forEach(b=>b.classList.remove('active'))}
+        const s=reduced?0:Math.sin(t/180), slow=reduced?0:Math.sin(t/500), blink=mode!=='surprise'&&t%3800>3650;
+        let bob=slow*2, tilt=0, scale=1, armL=0, armR=0, eye='normal', y=0, x=0;
+        if(mode==='wave'){armR=-.9+s*.45;tilt=s*.04;eye='happy'}
+        if(mode==='dance'){x=s*8;y=Math.abs(Math.sin(t/120))*-7;tilt=s*.16;armL=s*.7;armR=-s*.7;eye='happy'}
+        if(mode==='fly'){y=-24+slow*8;armL=-.65;armR=.65;eye='happy'}
+        if(mode==='think'){tilt=-.12+slow*.04;armR=-1.1;eye='think'}
+        if(mode==='sleep'){bob=0;tilt=.1;eye='sleep'}
+        if(mode==='surprise'){scale=1+Math.abs(s)*.08;y=-Math.abs(s)*4;eye='wide'}
+        if(mode==='celebrate'){y=-Math.abs(Math.sin(t/120))*10;armL=-1;armR=1;eye='happy'}
+        if(mode==='scan'){eye='scan';tilt=slow*.06}
+        if(mode==='missile'){armL=-.45;eye='wide';tilt=-.06}
+        if(mode==='swarm'){armL=-.6;armR=.35;eye='happy';tilt=Math.sin(t/90)*.035}
+        ctx.save();ctx.translate(x,y+bob);ctx.translate(95,112);ctx.rotate(tilt);ctx.scale(scale,scale);ctx.translate(-95,-112);
+        ellipse(95,184,48,7,'rgba(0,0,0,.25)');
+        if(mode==='fly'){ctx.save();ctx.globalAlpha=.8;ellipse(73,180,8,18,'#58f1df');ellipse(117,180,8,18,'#4d8dff');ctx.restore()}
+
+        function arm(side,angle){const sx=side<0?57:133, sy=122;ctx.save();ctx.translate(sx,sy);ctx.rotate(side<0?-angle:angle);line(0,0,side*23,20,'#71839b',9);ellipse(side*25,22,8,8,mode==='celebrate'?'#ffcf5a':'#4d8dff');ctx.restore()}
+        arm(-1,armL);arm(1,armR);
+        line(72,158,68,180,'#71839b',10);line(118,158,122,180,'#71839b',10);ellipse(64,183,15,6,'#263a55');ellipse(126,183,15,6,'#263a55');
+        roundRect(58,103,74,61,17,'#dfeaf5','#7389a2');roundRect(65,111,60,39,11,'#162a43');
+        const glow=mode==='sleep'?'#778aa1':mode==='surprise'?'#ff5e8a':'#58f1df';ellipse(95,130,10+slow,10+slow,glow);ellipse(95,130,4,4,'#fff');
+
+        ctx.save();ctx.translate(95,77);ctx.rotate(tilt*.35);
+        line(0,-38,0,-49,'#71839b',4);ellipse(0,-53,6,6,mode==='sleep'?'#778aa1':'#58f1df');
+        roundRect(-42,-38,84,66,15,'#e8f1fa','#71839b');roundRect(-34,-29,68,46,10,'#10223a');
+        let dx=Math.max(-4,Math.min(4,(pointer.x-95)/25)),dy=Math.max(-3,Math.min(3,(pointer.y-70)/30));
+        if(eye==='sleep'){line(-23,-6,-9,-6,'#58f1df',3);line(9,-6,23,-6,'#58f1df',3)}
+        else if(blink){line(-23,-4,-9,-4,'#58f1df',3);line(9,-4,23,-4,'#58f1df',3)}
+        else {const er=eye==='wide'?9:eye==='happy'?7:6;ellipse(-17+dx,-6+dy,er,eye==='happy'?8:er,'#58f1df');ellipse(17+dx,-6+dy,er,eye==='happy'?8:er,'#58f1df');ellipse(-15+dx,-8+dy,2,2,'#fff');ellipse(19+dx,-8+dy,2,2,'#fff')}
+        ctx.strokeStyle='#58f1df';ctx.lineWidth=2.5;ctx.lineCap='round';ctx.beginPath();
+        if(eye==='happy')ctx.arc(0,2,12,.2,Math.PI-.2);else if(eye==='wide'){ctx.arc(0,7,5,0,Math.PI*2)}else if(eye==='think'){ctx.moveTo(-7,7);ctx.quadraticCurveTo(2,2,9,7)}else if(eye==='sleep'){ctx.moveTo(-7,7);ctx.lineTo(7,7)}else{ctx.moveTo(-8,7);ctx.quadraticCurveTo(0,11,8,7)}ctx.stroke();
+        if(mode==='scan'){const scanY=-25+(t/18)%39;ctx.fillStyle='rgba(88,241,223,.48)';ctx.fillRect(-30,scanY,60,2)}
+        ctx.restore();ctx.restore();
+
+        if(mode==='missile'||mode==='swarm'){ctx.save();ctx.translate(50,107);ctx.rotate(-.3);roundRect(-24,-8,38,16,6,'#394f69','#91a7bf');ctx.fillStyle='#15283e';ctx.fillRect(-31,-5,12,10);ellipse(15,0,7,7,mode==='swarm'?'#58f1df':'#ffcf5a');ctx.restore()}
+
+        if(mode==='think'){ctx.fillStyle='#ffcf5a';ctx.font='bold 25px system-ui';ctx.fillText('💡',138,43)}
+        if(mode==='sleep'){ctx.fillStyle='#9fb6d1';ctx.font='bold 18px system-ui';ctx.fillText('Z',138,64);ctx.font='bold 13px system-ui';ctx.fillText('Z',157,45)}
+        drawParticles();drawFX(t);
+      }
+
+      function setCarMode(next,duration=3200){carMode=next;carModeUntil=performance.now()+duration;document.querySelector('#car-status').textContent=next.toUpperCase();document.querySelectorAll('[data-car-mode]').forEach(b=>b.classList.toggle('active',b.dataset.carMode===next));if(next==='dirty')carDirty=true;if(next==='wash'){carDirty=true;carWashStart=performance.now()}if(next==='complete'){carDirty=false;burst(55)}if(next==='payment')burst(18,'#ffcf5a')}
+      function drawCar(t){
+        ctx.clearRect(0,0,W,H);if(carMode!=='idle'&&t>carModeUntil){carMode='idle';document.querySelector('#car-status').textContent='PRONTO';document.querySelectorAll('[data-car-mode]').forEach(b=>b.classList.remove('active'))}
+        const s=reduced?0:Math.sin(t/150),slow=reduced?0:Math.sin(t/470);let bob=slow*1.5,tilt=0,body='#3184ef',light='#dffcff',arm=0;
+        if(carMode==='arrived'){bob=-Math.abs(s)*4;arm=-.8+s*.45}
+        if(carMode==='complete'){bob=-Math.abs(Math.sin(t/110))*8;tilt=s*.045;body='#42a0ff'}
+        if(carMode==='conflict'){body=Math.sin(t/100)>0?'#ff4f67':'#8d2940';light='#ffcf5a'}
+        if(carMode==='empty'){bob=0;tilt=.07;light='#7890a8'}
+        if(carMode==='schedule')light=Math.sin(t/90)>0?'#fff':'#58f1df';
+        if(carMode==='notice'){tilt=s*.055;arm=-.7+s*.25}
+        if(carMode==='wash'&&t-carWashStart>2400)carDirty=false;
+        ctx.save();ctx.translate(0,bob);ctx.translate(95,130);ctx.rotate(tilt);ctx.translate(-95,-130);
+        ellipse(95,183,60,8,'rgba(0,0,0,.27)');ellipse(48,163,18,22,'#17263a');ellipse(142,163,18,22,'#17263a');ellipse(48,163,9,12,'#7e93aa');ellipse(142,163,9,12,'#7e93aa');
+        ctx.fillStyle=body;ctx.beginPath();ctx.moveTo(42,139);ctx.quadraticCurveTo(45,98,65,80);ctx.quadraticCurveTo(95,65,125,80);ctx.quadraticCurveTo(145,98,148,139);ctx.lineTo(153,166);ctx.quadraticCurveTo(95,182,37,166);ctx.closePath();ctx.fill();ctx.strokeStyle='#9bc8ff';ctx.lineWidth=2;ctx.stroke();
+        roundRect(60,83,70,40,14,'#15304d','#75b5f5');ctx.fillStyle='rgba(255,255,255,.14)';ctx.beginPath();ctx.moveTo(68,88);ctx.lineTo(94,88);ctx.lineTo(76,118);ctx.lineTo(64,118);ctx.closePath();ctx.fill();
+        const blink=carMode!=='schedule'&&t%3500>3370;ellipse(63,139,16,11,blink?'#6f849b':light);ellipse(127,139,16,11,blink?'#6f849b':light);if(!blink){ellipse(66,138,5,6,'#17456f');ellipse(130,138,5,6,'#17456f');ellipse(68,136,2,2,'#fff');ellipse(132,136,2,2,'#fff')}
+        roundRect(76,151,38,17,8,'#16334f');ctx.strokeStyle='#bfe7ff';ctx.lineWidth=2;ctx.beginPath();ctx.arc(95,151,10,.25,Math.PI-.25);ctx.stroke();
+        ctx.fillStyle='#fff';ctx.font='900 10px system-ui';ctx.textAlign='center';ctx.fillText('BOXLAV',95,177);ctx.textAlign='start';
+        line(39,137,23,150,'#98b7d4',7);ellipse(21,152,7,7,'#fff');ctx.save();ctx.translate(151,137);ctx.rotate(arm);line(0,0,16,14,'#98b7d4',7);ellipse(18,16,7,7,'#fff');ctx.restore();
+        if(carDirty){const mud=['#6e4b31','#81583a','#553a2a'];[[53,113,7],[79,130,5],[117,105,8],[137,157,6],[72,163,4]].forEach((d,i)=>ellipse(d[0],d[1],d[2],d[2]*.7,mud[i%3]))}
+        if(carMode==='wash'||carMode==='started'){for(let i=0;i<13;i++){const a=t/350+i*1.7,x=45+(i*17)%100,y=86+(i*23)%72+Math.sin(a)*5;ellipse(x,y,5+(i%3),5+(i%3),'rgba(236,250,255,.9)');ctx.strokeStyle='#9edcff';ctx.lineWidth=1;ctx.stroke()}if(carMode==='wash'){line(183,82,143,111,'#54c9ff',5);for(let i=0;i<5;i++)line(166+i*3,91-i*2,145+i*2,108+i*4,'rgba(205,244,255,.75)',2)}}
+        if(carMode==='complete'){for(let i=0;i<5;i++){ctx.save();ctx.translate(40+i*28,80+(i%2)*38);ctx.rotate(t/350+i);ctx.fillStyle='#fff';ctx.fillRect(-1,-8,2,16);ctx.fillRect(-8,-1,16,2);ctx.restore()}}
+        if(carMode==='schedule'){roundRect(126,50,45,40,7,'#fff','#4d8dff');ctx.fillStyle='#4d8dff';ctx.fillRect(126,50,45,12);ctx.fillStyle='#17304c';ctx.font='900 18px system-ui';ctx.fillText('12',137,82)}
+        if(carMode==='arrived'){ctx.strokeStyle='#58f1df';ctx.lineWidth=3;ctx.beginPath();ctx.arc(26,121,18,-.7,.7);ctx.arc(26,121,27,-.6,.6);ctx.stroke()}
+        if(carMode==='conflict'){ctx.fillStyle='#ffcf5a';ctx.beginPath();ctx.moveTo(95,39);ctx.lineTo(113,70);ctx.lineTo(77,70);ctx.closePath();ctx.fill();ctx.fillStyle='#4b3510';ctx.font='900 22px system-ui';ctx.fillText('!',91,65)}
+        if(carMode==='empty'){roundRect(7,93,49,34,6,'#fff','#7d91a9');ctx.fillStyle='#203650';ctx.font='800 9px system-ui';ctx.fillText('AGENDA',14,107);ctx.fillText('VAZIA',18,120);ctx.fillStyle='#a9bdd2';ctx.font='900 17px system-ui';ctx.fillText('Z',143,94);ctx.font='900 12px system-ui';ctx.fillText('Z',162,77)}
+        if(carMode==='payment'){ellipse(149,69,18,18,'#ffcf5a');ctx.fillStyle='#785915';ctx.font='900 17px system-ui';ctx.fillText('R$',139,75);roundRect(13,72,43,55,5,'#fff','#b8c9da');ctx.fillStyle='#50647a';ctx.font='700 7px system-ui';ctx.fillText('PAGO',24,87);ctx.fillRect(20,95,29,2);ctx.fillRect(20,103,25,2)}
+        if(carMode==='notice'){ctx.save();ctx.translate(144,84);ctx.rotate(s*.1);roundRect(-10,-25,43,29,5,'#ffcf5a','#594413');ctx.fillStyle='#493710';ctx.font='900 10px system-ui';ctx.fillText('AVISO',-4,-7);ctx.restore()}
+        ctx.restore();drawParticles();drawFX(t);
+      }
+
+      function drawScene(t){if(character==='car')drawCar(t);else drawRobot(t)}
+
+      function loop(t){if(t-last>=33){drawScene(t);last=t}raf=requestAnimationFrame(loop)}
+      function talk(){if(character==='car'){setCarMode('arrived',2600);bubble.classList.toggle('open');bubble.setAttribute('aria-hidden',String(!bubble.classList.contains('open')));title.textContent='Olá, eu sou o Boxinho! 🚙';text.textContent='Precisa de ajuda com sua agenda?';badge.style.opacity='0';return}const now=performance.now();if(now-lastTap<340){setMode('celebrate',3200);bubble.classList.remove('open');lastTap=0;return}lastTap=now;setMode('wave',2600);bubble.classList.toggle('open');bubble.setAttribute('aria-hidden',String(!bubble.classList.contains('open')));badge.style.opacity='0';title.textContent='Olá, eu sou o R1! 🤖';text.textContent='Precisa de ajuda?'}
+
+      document.querySelector('#controls').addEventListener('click',e=>{const b=e.target.closest('[data-mode]');if(b)setMode(b.dataset.mode,b.dataset.mode==='sleep'?5000:b.dataset.mode==='missile'?4800:b.dataset.mode==='swarm'?7000:3200)});
+      document.querySelector('#car-controls').addEventListener('click',e=>{const b=e.target.closest('[data-car-mode]');if(b)setCarMode(b.dataset.carMode,b.dataset.carMode==='wash'?4200:b.dataset.carMode==='empty'?5000:3200)});
+      document.querySelector('.topbar').addEventListener('click',e=>{const tab=e.target.closest('[data-page]');if(!tab)return;document.querySelectorAll('.tab').forEach(b=>b.classList.toggle('active',b===tab));document.querySelectorAll('.page').forEach(p=>p.hidden=p.id!==tab.dataset.page);character=tab.dataset.page==='boxlav-page'?'car':'robot';wrap.setAttribute('aria-label',character==='car'?'Mascote Boxinho. Toque para conversar.':'Robô R1. Toque para conversar.');badge.textContent=character==='car'?'TOQUE NO BOXINHO':'TOQUE EM MIM';bubble.classList.remove('open');bubble.setAttribute('aria-hidden','true');if(!botVisible){botVisible=true;wrap.style.display='block';fx.style.display='block';badge.style.display='block';document.querySelector('#show-bot').style.display='none';document.querySelector('#hide-bot').textContent='Ocultar bot'}});
+      document.querySelector('#hide-bot').addEventListener('click',()=>{botVisible=false;wrap.style.display='none';fx.style.display='none';badge.style.display='none';bubble.classList.remove('open');bubble.setAttribute('aria-hidden','true');document.querySelector('#show-bot').style.display='block'});
+      document.querySelector('#show-bot').addEventListener('click',()=>{botVisible=true;wrap.style.display='block';fx.style.display='block';badge.style.display='block';document.querySelector('#show-bot').style.display='none'});
+      wrap.addEventListener('pointerdown',talk);wrap.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' ')talk()});
+      document.querySelector('#yes').addEventListener('click',()=>{title.textContent='Claro! ✨';text.textContent=character==='car'?'Posso ajudar com agendamentos, clientes, horários e serviços do BoxLav.':'Posso abrir um atendimento, explicar esta página ou direcionar você para o WhatsApp.';character==='car'?setCarMode('schedule',3200):setMode('celebrate',3200)});
+      document.querySelector('#no').addEventListener('click',()=>{bubble.classList.remove('open');bubble.setAttribute('aria-hidden','true');character==='car'?setCarMode('empty',2800):setMode('sleep',2800)});
+      addEventListener('pointermove',e=>{const r=wrap.getBoundingClientRect();pointer.x=(e.clientX-r.left)*(W/r.width);pointer.y=(e.clientY-r.top)*(H/r.height);fxPointer.x=e.clientX;fxPointer.y=e.clientY},{passive:true});
+      document.addEventListener('visibilitychange',()=>{if(document.hidden)cancelAnimationFrame(raf);else{last=0;raf=requestAnimationFrame(loop)}});
+      addEventListener('resize',resize,{passive:true});
+      resize();if(reduced)drawScene(0);else raf=requestAnimationFrame(loop);
+      const auto=['wave','scan','think','dance'];idleTimer=setInterval(()=>{if(character==='robot'&&mode==='idle'&&!bubble.classList.contains('open'))setMode(auto[Math.floor(Math.random()*auto.length)],2200)},8500);
+      setTimeout(()=>badge.style.opacity='0',6000);
+    })();
+  </script>
+</body>
+</html>
